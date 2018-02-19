@@ -1,0 +1,7 @@
+EVENT: RED DRAGON
+CONSEQUENCE: "$c was destroyed" [1] 0.7
+CONSEQUENCE: "$c repelled the dragon" [2] 0.3
+P_RESPONSE: "%p hid during the dragon's assault in %y" [0] 0.5
+P_RESPONSE: "%P helped kill the dragon." [2] 0.1
+P_RESULT: "%p was left homeless after the dragon attack in %y" [1] 0.7
+C_RESULT: "The dragon rules the city" [1] 0.1
