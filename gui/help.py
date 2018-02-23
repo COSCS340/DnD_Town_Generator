@@ -4,6 +4,7 @@ from PyQt5.QtCore import *
 import sys
 import os
 
+#path = os.path.join(os.path.dirname(sys.modules[__name__].__file__), 'help.ico')
 
 class Thing(QWidget):
 
@@ -11,8 +12,9 @@ class Thing(QWidget):
         super().__init__()
         #self.setWindowIcon(QtGui.QIcon('help1.png'))
         scriptDir = os.path.dirname(os.path.realpath(__file__))
-        print (scriptDir + os.path.sep + "help1.png")
-        self.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'help1.png'))
+        print (scriptDir + os.path.sep + "help.ico")
+        self.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'help.ico'))
+        #self.setWindowIcon(QtGui.QIcon(path))
         self.initUI()
 
     def initUI(self):
