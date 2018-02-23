@@ -4,6 +4,7 @@ from PyQt5.QtCore import *
 import sys
 import os
 
+
 class Thing(QWidget):
 
     def __init__(self):
