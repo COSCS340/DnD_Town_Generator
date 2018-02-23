@@ -1,7 +1,6 @@
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMenuBar
 from PyQt5 import QtGui
-from PyQt5.QtMacExtras import QMacToolBar
 import sys
 
 class Example(QtWidgets.QMainWindow):
@@ -14,6 +13,7 @@ class Example(QtWidgets.QMainWindow):
         #OSX toolbar
         if sys.platform == 'darwin':
             print("You're running mac")
+            from PyQt5.QtMacExtras import QMacToolBar
             sys.exit()
 
         else:
