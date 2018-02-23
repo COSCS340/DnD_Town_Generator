@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMenuBar
 from PyQt5 import QtGui
+from PyQt5.QtMacExtras import QMacToolBar
 import sys
 
 class Example(QtWidgets.QMainWindow):
@@ -10,15 +11,22 @@ class Example(QtWidgets.QMainWindow):
         self.initUI()
 
     def initUI(self):
-        self.toolbar = self.addToolBar('Bar')
+        #OSX toolbar
+        if sys.platform == 'darwin':
+            print("You're running mac")
+            sys.exit()
 
-        #exitButton = QtWidgets.QAction(QtGui.QIcon('./exit.png'), ' &Exit', self)
-        exitButton = QtWidgets.QAction("File", self)
-        exitButton.setShortcut('Ctrl+Q')
-        exitButton.setStatusTip('Exit application')
-        exitButton.triggered.connect(self.close)
+        else:
+            print("You're runing not-mac")
+            self.toolbar = self.addToolBar('Bar')
 
-        self.toolbar.addAction(exitButton)
+        #exitButton = QtWidgets.QAction(QtGui.QIcon('exit.png'), ' &Exit', self)
+        fileButton = QtWidgets.QAction("File", self)
+        fileButton.setShortcut('Ctrl+Q')
+        fileButton.setStatusTip('Exit application')
+        fileButton.triggered.connect(self.close)
+
+        self.toolbar.addAction(fileButton)
         self.toolbar.setMovable(False)
 
         self.setGeometry(300,300,300,300)
