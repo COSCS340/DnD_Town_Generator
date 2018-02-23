@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QMenuBar
 from PyQt5 import QtGui
 import sys
 
@@ -9,19 +10,20 @@ class Example(QtWidgets.QMainWindow):
         self.initUI()
 
     def initUI(self):
-        exitAction = QtWidgets.QAction(QtGui.QIcon('exit.png'), '&Exit', self)
-        exitAction.setShortcut('Ctrl+Q')
-        exitAction.setStatusTip('Exit Application')
-        exitAction.triggered.connect(QtWidgets.qApp.quit())
+        self.toolbar = self.addToolBar('Bar')
 
-        self.statusBar()
+        #exitButton = QtWidgets.QAction(QtGui.QIcon('./exit.png'), ' &Exit', self)
+        exitButton = QtWidgets.QAction("File", self)
+        exitButton.setShortcut('Ctrl+Q')
+        exitButton.setStatusTip('Exit application')
+        exitButton.triggered.connect(self.close)
 
-        menu = self.menuBar()
-        fileMenu = menu.addMenu('&File')
-        fileMenu.addAction(exitAction)
+        self.toolbar.addAction(exitButton)
+        self.toolbar.setMovable(False)
 
         self.setGeometry(300,300,300,300)
         self.setWindowTitle("Menu")
+
         self.show()
 
 if __name__ == '__main__':
