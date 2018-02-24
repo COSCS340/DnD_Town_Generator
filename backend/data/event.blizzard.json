@@ -1,0 +1,15 @@
+{
+    "blizzard": {
+        "description": "A blizzard covers the town waist deep in snow",
+        "outcomes": {
+            "town destroyed": {
+                "description": "Everyone froze because fire doesn't exist",
+                "chance": 50
+            },
+            "heavy damage": {
+                "description": "4 people died",
+                "chance": 40
+            }
+        }
+    }
+}

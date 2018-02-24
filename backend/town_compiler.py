@@ -10,7 +10,7 @@ class TownCompiler:
 
     def new_town(self, name):
         self.data['name'] = name
-        self.data['characters'] = {}
+        self.data['townspeople'] = {}
         self.data['events'] = {}
     
     def load_town(self, fn):
@@ -21,20 +21,31 @@ class TownCompiler:
         with open(fn, 'w') as fp:
             json.dump(self.data, fp)
 
-# welcome message
-print("Town Compiler")
+    def get_townspeople(self):
+        return self.data['characters'].keys()
 
-# setup
-tc = TownCompiler()
+    def dothing(self):
+        event = json.load(open('data/event.dragonattack.json'))
+        event2 = json.load(open('data/event.blizzard.json'))
+        self.data['events'].update(event)
+        self.data['events'].update(event2)
 
-#tc.load_town('data/yeoldentowne.json')
-tc.new_town('crap test town')
-tc.export_town('crap.json')
+if __name__ == '__main__':
+    # welcome message
+    print("Town Compiler")
 
-# main loop
-while True:
-    print('What do?')
-    i = input()
-    if i is 'q': break
-    print('')
+    # setup
+    tc = TownCompiler()
 
+    tc.load_town('data/crap.json')
+    tc.dothing()
+    tc.export_town('data/crap2.json')
+
+    '''
+    # main loop
+    while True:
+        print('What do?')
+        i = input()
+        if i is 'q': break
+        print('')
+    '''
