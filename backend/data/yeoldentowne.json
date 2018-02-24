@@ -1,0 +1,34 @@
+{
+    "name": "Ye Olden Towne",
+    "characters": {
+        "Poopsmith": {
+            "description": "Something something strongbad something",
+            "whatever traits": "I don't know"
+        },
+        "Some guy named Steve": {
+            "description": "He's Steve.  That's all you need to know",
+            "whatever traits": "I don't know"
+        }
+    },
+    "events": {
+        "dragon attack": {
+            "description": "A dragon attacks the town",
+            "outcomes": {
+                "town destroyed": {
+                    "description": "The town was destroyed",
+                    "chance": 50
+                },
+                "heavy damage": {
+                    "description": "The town was heavily damaged",
+                    "chance": 40
+                }
+            },
+            "reactions": {
+                
+            }
+        },
+        "blizzard": {
+            "description": "a blizzard covers the town for 3 months in 4 feet of snow"
+        }
+    }
+}
