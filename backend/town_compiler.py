@@ -27,5 +27,14 @@ print("Town Compiler")
 # setup
 tc = TownCompiler()
 
-tc.load_town('data/yeoldentowne.py')
+#tc.load_town('data/yeoldentowne.json')
+tc.new_town('crap test town')
+tc.export_town('crap.json')
+
+# main loop
+while True:
+    print('What do?')
+    i = input()
+    if i is 'q': break
+    print('')
 
