@@ -14,7 +14,7 @@ class CreatorWin(QWidget):
     def __init__(self):
         # variables
         super().__init__()
-        self.title = 'D&D Town Creator'
+        self.title = 'D&D Town Wizard'
         self.left = 10
         self.top = 10
         self.width = 600
@@ -98,7 +98,10 @@ class CreatorWin(QWidget):
     def filesig(self):
         index = self.widgets['tree'].currentIndex()
         self.curr_file = self.models['tree'].filePath(index)
-        self.curr_list.append(self.curr_file)
+        tmpset = set(self.curr_list)
+        tmpset.add(self.curr_file)
+        self.curr_list = list(tmpset)
+        #self.curr_list = list(set(self.curr_list).add(self.curr_file))
         print(self.curr_file)
         self.widgets['selected'].clear()
         self.widgets['selected'].addItems(self.curr_list)
@@ -124,10 +127,11 @@ class CreatorWin(QWidget):
     def buildsig(self):
         if self.town.active:
             name, _ = QFileDialog.getSaveFileName(self, 'Save File', './towns')
-            print(name[-5:])
-            if name[-5:] != '.json': name = name + '.json'
-            if name:
-                self.town.build(name)
+
+            if name != '':
+                print(name[-5:])
+                if name[-5:] != '.json': name = name + '.json'
+                    self.town.build(name)
 
     ## signal helpers
 
