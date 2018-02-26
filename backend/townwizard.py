@@ -10,7 +10,7 @@ from town import Town
 import sys
 
 
-class CreatorWin(QWidget):
+class Wizard(QWidget):
     def __init__(self):
         # variables
         super().__init__()
@@ -31,11 +31,6 @@ class CreatorWin(QWidget):
         # variables
         self.models = {}
         self.widgets = {}
-        self.curr_list = []
-        self.curr_file = ''
-        
-        # FOR NOW MAKES NEW TOWNS ONLY
-        #self.town.new_town()
 
         # add elements and setup layout
         self.setup()
@@ -96,15 +91,31 @@ class CreatorWin(QWidget):
     ## signals
     
     def filesig(self):
+        # get file name
         index = self.widgets['tree'].currentIndex()
-        self.curr_file = self.models['tree'].filePath(index)
-        tmpset = set(self.curr_list)
-        tmpset.add(self.curr_file)
-        self.curr_list = list(tmpset)
-        #self.curr_list = list(set(self.curr_list).add(self.curr_file))
-        print(self.curr_file)
+        fullname = self.models['tree'].filePath(index)
+        
+        # get partial file name and type
+        prettyname = fullname[(fullname.rfind('/') + 1):]
+        ftype = prettyname[:prettyname.find('.')]
+        
+        # check type
+        
+        # event
+        if ftype == 'event':
+            # if not already selected
+            if prettyname not in self.town.events:
+                self.town.events[prettyname] = fullname
+                print(prettyname)
+        # townspeople  
+        elif ftype == 'townspeople':
+            if prettyname not in self.town.townspeople:
+                self.town.townspeople[prettyname] = fullname
+                print(prettyname)
+
+        # update
         self.widgets['selected'].clear()
-        self.widgets['selected'].addItems(self.curr_list)
+        self.widgets['selected'].addItems(self.town.events.keys() | self.town.townspeople.keys())
     
     def newsig(self):
         if self.town.active:
@@ -131,7 +142,7 @@ class CreatorWin(QWidget):
             if name != '':
                 print(name[-5:])
                 if name[-5:] != '.json': name = name + '.json'
-                    self.town.build(name)
+                self.town.build(name)
 
     ## signal helpers
 
@@ -152,7 +163,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     
     # initalize classes
-    win = CreatorWin()
+    win = Wizard()
 
     # execute, clean up, and exit
     sys.exit(app.exec_())

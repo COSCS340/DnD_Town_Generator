@@ -2,12 +2,16 @@
 # Author:  Ben Johnson
 # Purpose: Compiles and/or edits a town
 
+# TODO: Add error checking
+
 import json
 import glob
 
 class Town:
     def __init__(self):
         self.data = {}
+        self.events = {}
+        self.townspeople = {}
         self.active = False
 
     def new(self, name):
@@ -22,6 +26,10 @@ class Town:
             self.data = json.load(fp)
 
     def build(self, fn):
+        for i in self.events:
+            self.add_event_file(self.events[i])
+        for i in self.townspeople:
+            self.add_townspeople_file(self.townspeople[i])
         with open(fn, 'w') as fp:
             json.dump(self.data, fp)
         self.active = False
@@ -29,6 +37,14 @@ class Town:
     def clear(self):
         self.data.clear()
         self.active = False
+
+    def add_event_file(self, fn):
+        event = json.load(open(fn))
+        self.data['events'].update(event)
+
+    def add_townspeople_file(self, fn):
+        tp = json.load(open(fn))
+        self.data['townspeople'].update(tp)
 
     ## get functions
 
@@ -42,20 +58,3 @@ class Town:
     # data grabbing
     def get_townspeople(self):
         return self.data['townspeople'].keys()
-
-    # TESTING
-    def dothing(self):
-        event = json.load(open('data/event.dragonattack.json'))
-        event2 = json.load(open('data/event.blizzard.json'))
-        self.data['events'].update(event)
-        self.data['events'].update(event2)
-        tp = json.load(open('data/townspeople.common.json'))
-        self.data['townspeople'].update(tp)
-
-if __name__ == '__main__':
-    # welcome message
-    print("Town")
-
-    # setup
-    t = Town()
-    t.clear()
