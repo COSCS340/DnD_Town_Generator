@@ -5,7 +5,7 @@
 import json
 import glob
 
-class TownCompiler:
+class Town:
     def __init__(self):
         self.data = {}
 
@@ -46,15 +46,15 @@ class TownCompiler:
 
 if __name__ == '__main__':
     # welcome message
-    print("Town Compiler")
+    print("Town")
 
     # setup
-    tc = TownCompiler()
+    t = Town()
 
     print(tc.get_event_files())
-    tc.new_town('test town')
-    tc.dothing()
-    tc.export_town('towns/comptest.json')
+    t.new_town('test town')
+    t.dothing()
+    t.export_town('towns/comptest.json')
 
     '''
     # main loop
