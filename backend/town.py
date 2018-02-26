@@ -8,19 +8,27 @@ import glob
 class Town:
     def __init__(self):
         self.data = {}
+        self.active = False
 
-    def new_town(self, name):
+    def new(self, name):
+        self.active = True
         self.data['name'] = name
         self.data['townspeople'] = {}
         self.data['events'] = {}
     
-    def load_town(self, fn):
+    def load(self, fn):
+        self.active = True
         with open(fn, 'r') as fp:
             self.data = json.load(fp)
 
-    def export_town(self, fn):
+    def export(self, fn):
         with open(fn, 'w') as fp:
             json.dump(self.data, fp)
+        self.active = False
+    
+    def clear(self):
+        self.data.clear()
+        self.active = False
 
     ## get functions
 
@@ -50,17 +58,4 @@ if __name__ == '__main__':
 
     # setup
     t = Town()
-
-    print(tc.get_event_files())
-    t.new_town('test town')
-    t.dothing()
-    t.export_town('towns/comptest.json')
-
-    '''
-    # main loop
-    while True:
-        print('What do?')
-        i = input()
-        if i is 'q': break
-        print('')
-    '''
+    t.clear()

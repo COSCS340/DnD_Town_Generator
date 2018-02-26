@@ -1,5 +1,5 @@
 # Town Wizard
-# Purpose: A wizard (pun completely intended) to aid in the
+# Purpose: A wizard (joke completely intended) to aid in the
 #          compilation of town elements
 # Author:  Ben Johnson
 
@@ -19,11 +19,8 @@ class CreatorWin(QWidget):
         self.top = 10
         self.width = 600
         self.height = 400
-        self.town = TownCompiler()
-
-        # passed town
-        #self.town = town
-        
+        self.town = Town()
+  
         # init
         self.initUI()
  
@@ -32,11 +29,13 @@ class CreatorWin(QWidget):
         self.setGeometry(self.left, self.top, self.width, self.height)
         
         # variables
+        self.models = {}
+        self.widgets = {}
         self.curr_list = []
         self.curr_file = ''
         
         # FOR NOW MAKES NEW TOWNS ONLY
-        # self.town.new_town()
+        #self.town.new_town()
 
         # add elements and setup layout
         self.setup()
@@ -49,49 +48,98 @@ class CreatorWin(QWidget):
         gridlayout = QGridLayout()
         
         # widgets
-        self.tree = QTreeView()
-        self.selected = QListWidget()
-        self.new_file = QPushButton('New')
-        self.edit_file = QPushButton('Edit')
-        self.add_file = QPushButton('Add')
-        self.compile = QPushButton('Create Town')
+        self.widgets['tree'] = QTreeView()
+        self.widgets['selected'] = QListWidget()
+        self.widgets['new'] = QPushButton('New')
+        self.widgets['edit'] = QPushButton('Edit')
+        self.widgets['add'] = QPushButton('Add')
+        self.widgets['build'] = QPushButton('Build Town')
+        self.widgets['newtown'] = QPushButton('New Town')
+        self.widgets['loadtown'] = QPushButton('Load Town')
         
+        # models
+        self.models['tree'] = QFileSystemModel()
+
         # file browser widget setup
-        self.treebase = QFileSystemModel()
-        self.treebase.setRootPath('')
-        self.tree.setModel(self.treebase)
-        self.tree.setRootIndex(self.treebase.index('./data'))
-        self.tree.setAnimated(False)
-        self.tree.setIndentation(15)
-        self.tree.setSortingEnabled(True)
-        self.tree.hideColumn(1)
-        self.tree.hideColumn(2)
-        self.tree.hideColumn(3)
-        self.tree.doubleClicked.connect(self.filesig)
+        self.models['tree'].setRootPath('')
+        self.widgets['tree'].setModel(self.models['tree'])
+        self.widgets['tree'].setRootIndex(self.models['tree'].index('./data'))
+        self.widgets['tree'].setAnimated(False)
+        self.widgets['tree'].setIndentation(15)
+        self.widgets['tree'].setSortingEnabled(True)
+        self.widgets['tree'].hideColumn(1)
+        self.widgets['tree'].hideColumn(2)
+        self.widgets['tree'].hideColumn(3)
+        self.widgets['tree'].doubleClicked.connect(self.filesig)
         
         # add button widget setup
-        self.add_file.clicked.connect(self.filesig)
+        self.widgets['add'].clicked.connect(self.filesig)
  
         # Current element list
-        self.selected.addItems(self.curr_list)
+        self.widgets['selected'].addItems(self.curr_list)
+        
+        # new town widget setup
+        self.widgets['newtown'].clicked.connect(self.newsig)
+        
+        # load town widget setup
+        self.widgets['loadtown'].clicked.connect(self.loadsig)
 
         # add to grid layout
-        gridlayout.addWidget(self.tree,0,0,1,3)
-        gridlayout.addWidget(self.new_file,1,0)
-        gridlayout.addWidget(self.edit_file,1,1)
-        gridlayout.addWidget(self.add_file,1,2)
-        gridlayout.addWidget(self.selected,0,3)
-        gridlayout.addWidget(self.compile,1,3)
+        gridlayout.addWidget(self.widgets['tree'],0,0,2,3)
+        gridlayout.addWidget(self.widgets['new'],2,0)
+        gridlayout.addWidget(self.widgets['edit'],2,1)
+        gridlayout.addWidget(self.widgets['add'],2,2)
+        gridlayout.addWidget(self.widgets['newtown'],0,3)
+        gridlayout.addWidget(self.widgets['loadtown'],0,4)
+        gridlayout.addWidget(self.widgets['selected'],1,3,1,2)
+        gridlayout.addWidget(self.widgets['build'],2,4)
+        gridlayout.setColumnStretch(3, 4)
+        gridlayout.setColumnStretch(4, 4)
         
         # set layout
         self.setLayout(gridlayout)
 
-    # signals
+    ## signals
+    
     def filesig(self):
-        index = self.tree.currentIndex()
-        self.curr_file = self.treebase.filePath(index)
-        self.curr_list.append(self.curr_file)
-        print(self.curr_list)
+        index = self.widgets['tree'].currentIndex()
+        self.curr_file = self.models['tree'].filePath(index)
+        # self.curr_list = list(set(self.curr_list) | set(self.curr_file))
+        print(self.curr_file)
+        self.widgets['selected'].clear()
+        self.widgets['selected'].addItems(self.curr_list)
+    
+    def newsig(self):
+        if self.town.active:
+            reply = QMessageBox.question(self, 'Error', "A town is already loaded.  Do you want to start over?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if reply == QMessageBox.Yes:
+                self.town.clear()
+                self.new_town()
+        else:
+            self.new_town()
+
+    def loadsig(self):
+        if self.town.active:
+            reply = QMessageBox.question(self, 'Error', "A town is already loaded.  Do you want to continue?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if reply == QMessageBox.Yes:
+                self.town.clear()
+                self.load_town()
+        else:
+            self.load_town()
+
+    ## signal helpers
+
+    def new_town(self):
+        name, ok = QInputDialog.getText(self, "New Town","Town Name", QLineEdit.Normal, "")
+        if ok:
+            if name != '':
+                self.town.new(name)
+            else: QMessageBox.warning(self, "Name Error", "You did not enter a name. No town was created", QMessageBox.Ok, QMessageBox.NoButton)
+
+    def load_town(self):
+        name, _ = QFileDialog.getOpenFileName(self, 'Open File', './towns')
+        if name:
+            self.town.load(name)
    
 
 if __name__ == '__main__':
@@ -99,18 +147,10 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     
     # initalize classes
-    #tc = TownCompiler()
     win = CreatorWin()
-    
-    # setup
-    
-    
-    # clean up and exit
-    app.exec_()
-    
-    win.curr_list = tc.get_event_files()
-    
-    sys.exit()
+
+    # execute, clean up, and exit
+    sys.exit(app.exec_())
 
 
 
