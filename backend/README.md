@@ -6,8 +6,8 @@ Additionally, an API is in the works to communicate with the front end of this H
 ## Folder Hierarchy
 ### ./data:
 individual events and separate town information
-#### File naming scheme:
-Events preceded with event.*.json
-Townspeople preceded with townspeople.*.json
+
+**File naming scheme:** Event files are preceded with "event." Townspeople files are preceded with "townspeople."
+
 ### ./towns
 Compiled towns - made up of events in ./data
