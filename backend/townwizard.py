@@ -72,17 +72,11 @@ class CreatorWin(QWidget):
         self.widgets['tree'].hideColumn(3)
         self.widgets['tree'].doubleClicked.connect(self.filesig)
         
-        # add button widget setup
+        # signals
         self.widgets['add'].clicked.connect(self.filesig)
- 
-        # Current element list
-        self.widgets['selected'].addItems(self.curr_list)
-        
-        # new town widget setup
         self.widgets['newtown'].clicked.connect(self.newsig)
-        
-        # load town widget setup
         self.widgets['loadtown'].clicked.connect(self.loadsig)
+        self.widgets['build'].clicked.connect(self.buildsig)
 
         # add to grid layout
         gridlayout.addWidget(self.widgets['tree'],0,0,2,3)
@@ -104,7 +98,7 @@ class CreatorWin(QWidget):
     def filesig(self):
         index = self.widgets['tree'].currentIndex()
         self.curr_file = self.models['tree'].filePath(index)
-        # self.curr_list = list(set(self.curr_list) | set(self.curr_file))
+        self.curr_list.append(self.curr_file)
         print(self.curr_file)
         self.widgets['selected'].clear()
         self.widgets['selected'].addItems(self.curr_list)
@@ -126,6 +120,14 @@ class CreatorWin(QWidget):
                 self.load_town()
         else:
             self.load_town()
+    
+    def buildsig(self):
+        if self.town.active:
+            name, _ = QFileDialog.getSaveFileName(self, 'Save File', './towns')
+            print(name[-5:])
+            if name[-5:] != '.json': name = name + '.json'
+            if name:
+                self.town.build(name)
 
     ## signal helpers
 
@@ -140,7 +142,6 @@ class CreatorWin(QWidget):
         name, _ = QFileDialog.getOpenFileName(self, 'Open File', './towns')
         if name:
             self.town.load(name)
-   
 
 if __name__ == '__main__':
     # QT IT UP

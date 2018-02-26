@@ -21,7 +21,7 @@ class Town:
         with open(fn, 'r') as fp:
             self.data = json.load(fp)
 
-    def export(self, fn):
+    def build(self, fn):
         with open(fn, 'w') as fp:
             json.dump(self.data, fp)
         self.active = False
