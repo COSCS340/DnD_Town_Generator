@@ -3,6 +3,7 @@
 # Purpose: Compiles and/or edits a town
 
 import json
+import glob
 
 class TownCompiler:
     def __init__(self):
@@ -21,14 +22,27 @@ class TownCompiler:
         with open(fn, 'w') as fp:
             json.dump(self.data, fp)
 
-    def get_townspeople(self):
-        return self.data['characters'].keys()
+    ## get functions
 
+    # file grabbing
+    def get_event_files(self):
+        return glob.glob('data/event.*.json')
+
+    def get_townspeople_files(self):
+        return glob.glob('data/townspeople.*.json')
+
+    # data grabbing
+    def get_townspeople(self):
+        return self.data['townspeople'].keys()
+
+    # TESTING
     def dothing(self):
         event = json.load(open('data/event.dragonattack.json'))
         event2 = json.load(open('data/event.blizzard.json'))
         self.data['events'].update(event)
         self.data['events'].update(event2)
+        tp = json.load(open('data/townspeople.common.json'))
+        self.data['townspeople'].update(tp)
 
 if __name__ == '__main__':
     # welcome message
@@ -37,9 +51,10 @@ if __name__ == '__main__':
     # setup
     tc = TownCompiler()
 
-    tc.load_town('data/crap.json')
+    print(tc.get_event_files())
+    tc.new_town('test town')
     tc.dothing()
-    tc.export_town('data/crap2.json')
+    tc.export_town('towns/comptest.json')
 
     '''
     # main loop
