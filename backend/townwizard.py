@@ -17,7 +17,7 @@ class Wizard(QtWidgets.QMainWindow):
         self.title = 'D&D Town Wizard'
         self.left = 10
         self.top = 10
-        self.width = 600
+        self.width = 800
         self.height = 400
         self.town = Town()
 
@@ -40,27 +40,41 @@ class Wizard(QtWidgets.QMainWindow):
         self.show()
 
     def setupInterface(self):
-        # layout
-        gridlayout = QGridLayout()
-        
         # widgets
         self.widgets['tree'] = QTreeView()
         self.widgets['selected'] = QListWidget()
         self.widgets['new'] = QPushButton('New')
         self.widgets['edit'] = QPushButton('Edit')
         self.widgets['add'] = QPushButton('Add')
-        self.widgets['build'] = QPushButton('Build Town')
         self.widgets['newtown'] = QPushButton('New Town')
         self.widgets['loadtown'] = QPushButton('Load Town')
         self.widgets['townlabel'] = QLabel(self)
         self.widgets['info'] = {}
-        self.widgets['info']['townname'] = "New Town"
+        self.widgets['info']['object'] = QGroupBox('Stats')
+        self.widgets['info']['townlabel'] = QLabel(self)
+        self.widgets['info']['towntext'] = QLineEdit(self)
+        self.widgets['info']['build'] = QPushButton('Build Town')
+
+        # layouts
+        gridlayout = QGridLayout()
+        vboxlayout = QGridLayout()
+        
+        # layout widgets
+        mainbox = QWidget(self)
+
+        # set main layout
+        self.setCentralWidget(mainbox)
+        mainbox.setLayout(gridlayout)
+        
+        # set town info box layout
+        self.widgets['info']['object'].setLayout(vboxlayout)
 
         # models
         self.models['tree'] = QFileSystemModel()
 
         # town name label widget setup
-        self.widgets['townlabel'].setText("WHEE THIS IS SOME TEXT")
+        self.widgets['info']['townlabel'].setText("Town Name")
+
         # file browser widget setup
         self.models['tree'].setRootPath('')
         self.widgets['tree'].setModel(self.models['tree'])
@@ -77,25 +91,24 @@ class Wizard(QtWidgets.QMainWindow):
         self.widgets['add'].clicked.connect(self.filesig)
         self.widgets['newtown'].clicked.connect(self.newsig)
         self.widgets['loadtown'].clicked.connect(self.loadsig)
-        self.widgets['build'].clicked.connect(self.buildsig)
+        self.widgets['info']['build'].clicked.connect(self.buildsig)
 
         # add to grid layout
         gridlayout.addWidget(self.widgets['tree'],0,0,1,3)
         gridlayout.addWidget(self.widgets['new'],1,0)
         gridlayout.addWidget(self.widgets['edit'],1,1)
         gridlayout.addWidget(self.widgets['add'],1,2)
-        gridlayout.addWidget(self.widgets['selected'],0,3)
-        gridlayout.addWidget(self.widgets['build'],1,3)
-        #gridlayout.addWidget(self.widgets['townlabel'],0,5)
-        gridlayout.setColumnStretch(3, 4)
-        #gridlayout.setColumnStretch(4, 4)
+        gridlayout.addWidget(self.widgets['selected'],0,3,2,1)
+        gridlayout.addWidget(self.widgets['info']['object'],0,4,2,1)
         
-        # set layout
-        #self.setLayout(gridlayout)
-        
-        cw = QWidget(self)
-        self.setCentralWidget(cw)
-        cw.setLayout(gridlayout)
+        vboxlayout.addWidget(self.widgets['info']['townlabel'],0,0)
+        vboxlayout.addWidget(self.widgets['info']['towntext'],0,1)
+        vboxlayout.addWidget(self.widgets['info']['build'],2,0,1,2)
+
+        # grid layout options
+        gridlayout.setColumnStretch(3, 3)
+        gridlayout.setColumnStretch(4, 4)
+        vboxlayout.setRowStretch(1, 4)
 
     def setupMenu(self):
         self.topbar = self.menuBar()
@@ -107,18 +120,14 @@ class Wizard(QtWidgets.QMainWindow):
         # file menu
         file_menu = self.topbar.addMenu('File')
         file_open = QtWidgets.QAction('Open', self)
-        file_new = QtWidgets.QAction('New', self)
         file_close = QtWidgets.QAction('Close', self)
         file_build = QtWidgets.QAction('Build', self)
         file_menu.addAction(file_open)
-        file_menu.addAction(file_new)
-        file_menu.addSeparator()
         file_menu.addAction(file_build)
         file_menu.addSeparator()
         file_menu.addAction(file_close)
         
         file_open.triggered.connect(self.loadsig)
-        file_new.triggered.connect(self.newsig)
         file_build.triggered.connect(self.buildsig)
         
         # edit menu
@@ -160,18 +169,23 @@ class Wizard(QtWidgets.QMainWindow):
             self.load_town()
     
     def buildsig(self):
-        if self.town.active:
-            name, _ = QFileDialog.getSaveFileName(self, 'Save File', './towns')
+        # check if town loaded
+        if not self.town.active:
+            print(self.widgets['info']['towntext'].text())
+            self.town.new(self.widgets['info']['towntext'].text())
 
-            if name != '':
-                print(name[-5:])
-                if name[-5:] != '.json': name = name + '.json'
-                self.town.build(name)
+        # save it
+        name, _ = QFileDialog.getSaveFileName(self, 'Save File', './towns')
+        if name != '':
+            print(name[-5:])
+            if name[-5:] != '.json': name = name + '.json'
+            self.town.build(name)
+            self.status.showMessage('Saved to ' + name)
 
     ## signal helpers
 
     def add_file(self, fullname):
-        # get partial file name and type
+        # get partial (pretty) file name and type
         prettyname = fullname[(fullname.rfind('/') + 1):]
         ftype = prettyname[:prettyname.find('.')]
 
@@ -180,31 +194,32 @@ class Wizard(QtWidgets.QMainWindow):
             contents = glob.glob(fullname + '/*')
             for i in contents: 
                 self.add_file(i)
+
+        # TODO check for .json extension
+
         # event
         elif ftype == 'event':
             # if not already selected
             if prettyname not in self.town.events:
                 self.town.events[prettyname] = fullname
                 print(prettyname)
+                self.status.showMessage('Event added')
+            else: self.status.showMessage('Event already added')
         # townspeople  
         elif ftype == 'townspeople':
             if prettyname not in self.town.townspeople:
                 self.town.townspeople[prettyname] = fullname
                 print(prettyname)
-        else: self.status.showMessage("Not a valid file")
-
-    def new_town(self):
-        name, ok = QInputDialog.getText(self, "New Town","Town Name", QLineEdit.Normal, "")
-        if ok:
-            if name != '':
-                self.town.new(name)
-            else: QMessageBox.warning(self, "Name Error", "You did not enter a name. No town was created", QMessageBox.Ok, QMessageBox.NoButton)
+                self.status.showMessage('Townspeople added')
+            else: self.status.showMessage('Townspeople already added')
+        else: self.status.showMessage('Not a valid file')
 
     def load_town(self):
         name, _ = QFileDialog.getOpenFileName(self, 'Open File', './towns')
         if name:
             self.town.load(name)
             self.status.showMessage("Town loaded")
+            self.widgets['info']['towntext'].setText(self.town.data['name'])
         else: self.status.showMessage("No town loaded")
 
 if __name__ == '__main__':
