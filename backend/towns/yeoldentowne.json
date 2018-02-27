@@ -1,16 +1,41 @@
 {
     "name": "Ye Olden Towne",
-    "characters": {
-        "Poopsmith": {
-            "description": "Something something strongbad something",
-            "whatever traits": "I don't know"
+    "townspeople": {
+        "Farmer": {
+            "Nearly starved during the winter of %y": 10,
+            "Made extra coin from a bountiful harvest": 10,
+            "An unknown party salted his fields": 5,
+            "Lost a finger to the pigs": 1
         },
-        "Some guy named Steve": {
-            "description": "He's Steve.  That's all you need to know",
-            "whatever traits": "I don't know"
+        "Fisherman": {
+            "Lost his boat to hostile aquatic life": 10,
+            "He swears that he saw a Kracken that day.": 10
+        },
+        "Guard": {
+            "Lost a hand in a fight with a theif.": 5,
+            "Died fighting against cultists.": 4,
+            "Got a promotion.": 10
+        },
+        "Hunter": {
+            "Badly injured by a wild boar.": 20,
+            "Gained a scar from a run-in with a bear.": 23,
+            "Contracted licanthropy while in the forest.": 12
         }
     },
     "events": {
+        "blizzard": {
+            "description": "A blizzard covers the town waist deep in snow",
+            "outcomes": {
+                "town destroyed": {
+                    "description": "Everyone froze because fire doesn't exist",
+                    "chance": 50
+                },
+                "heavy damage": {
+                    "description": "4 people died",
+                    "chance": 40
+                }
+            }
+        },
         "dragon attack": {
             "description": "A dragon attacks the town",
             "outcomes": {
@@ -22,13 +47,7 @@
                     "description": "The town was heavily damaged",
                     "chance": 40
                 }
-            },
-            "reactions": {
-                
             }
-        },
-        "blizzard": {
-            "description": "a blizzard covers the town for 3 months in 4 feet of snow"
         }
     }
 }
