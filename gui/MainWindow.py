@@ -1,34 +1,40 @@
 from PyQt5.QtWidgets import *
-from PyQt5 import QtGui
+from PyQt5.QtGui import *
 import sys
 
 class Example(QMainWindow):
-
     def __init__(self):
         super().__init__()
         self.initUI()
 
     def initUI(self):
         #OSX toolbar
+        #this doesn't work ):
         if sys.platform == 'darwin':
-            from PyQt5.QtMacExtras import QMacToolBar
-
+            #from PyQt5.QtMacExtras import QMacToolBar, QMacToolBarItem
+            mac = True
             #FIXME
-            self.toolbar = self.addToolBar('Bar')
-            self.toolbar.toggleViewAction()
+            #self.toolbar = self.addToolBar('Bar')
+            #elf.toolbar.toggleViewAction()
+            #self.macFileButton = QMacToolBarItem()
+            #self.toolbar = QMacToolBar()
+            #self.toolbar.addItem(QIcon('exit.png'), "File")
+            #self.toolbar.attachToWindow(self.createWindowContainer(id))
 
         else:
-            self.toolbar = self.addToolBar('Bar')
-            self.toolbar.toggleViewAction()
+            mac = False
+
+        #FIXME time to set up dropdowns
+        self.toolbar = self.addToolBar('Bar')
+        self.toolbar.toggleViewAction()
+        self.toolbar.setMovable(False)
 
         #exitButton = QAction(QtGui.QIcon('exit.png'), ' &Exit', self)
         fileButton = QAction("File", self)
         fileButton.setShortcut('Ctrl+Q')
         fileButton.setStatusTip('Exit application')
         fileButton.triggered.connect(self.close)
-
         self.toolbar.addAction(fileButton)
-        self.toolbar.setMovable(False)
 
         wizardButton = QPushButton("Wizard", self)
         wizardButton.clicked.connect(self.showWizard)
