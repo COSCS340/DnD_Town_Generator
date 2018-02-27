@@ -33,7 +33,7 @@ class Wizard(QtWidgets.QMainWindow):
         self.widgets = {}
         self.menu = {}
         self.undo = []
-        self.undone = []
+        self.redo = []
         
         # add elements and setup layout
         self.setupInterface()
@@ -81,6 +81,9 @@ class Wizard(QtWidgets.QMainWindow):
         # town name label widget setup
         self.widgets['info']['townlabel'].setText("Town Name")
 
+        # staging area widget setup
+        self.widgets['stage'].doubleClicked.connect(self.delsig)
+
         # file browser widget setup
         self.models['tree'].setRootPath('')
         self.widgets['tree'].setModel(self.models['tree'])
@@ -91,10 +94,10 @@ class Wizard(QtWidgets.QMainWindow):
         self.widgets['tree'].hideColumn(1)
         self.widgets['tree'].hideColumn(2)
         self.widgets['tree'].hideColumn(3)
-        self.widgets['tree'].doubleClicked.connect(self.filesig)
+        self.widgets['tree'].doubleClicked.connect(self.addsig)
         
         # signals
-        self.widgets['add'].clicked.connect(self.filesig)
+        self.widgets['add'].clicked.connect(self.addsig)
         self.widgets['newtown'].clicked.connect(self.newsig)
         self.widgets['loadtown'].clicked.connect(self.loadsig)
         self.widgets['info']['build'].clicked.connect(self.buildsig)
@@ -157,7 +160,7 @@ class Wizard(QtWidgets.QMainWindow):
 
     ## signals
     
-    def filesig(self):
+    def addsig(self):
         # get file name
         index = self.widgets['tree'].currentIndex()
         fullname = self.models['tree'].filePath(index)
@@ -166,6 +169,23 @@ class Wizard(QtWidgets.QMainWindow):
         self.add_file(fullname)
 
         # update staging view
+        self.update_staging()
+
+    def delsig(self):
+        # get file name
+        prettyname = self.widgets['stage'].selectedIndexes()[0].data()
+
+        # remove it
+        ftype = prettyname[:prettyname.find('.')]
+        if ftype == 'event':
+            fullname = self.town.events[prettyname]
+            self.town.events.pop(prettyname)
+            self.log_change('delevent', prettyname, fullname)
+        if ftype == 'townspeople':
+            fullname = self.town.townspeople[prettyname]
+            self.town.townspeople.pop(prettyname)
+            self.log_change('deltownspeople', prettyname, fullname)
+
         self.update_staging()
     
     def newsig(self):
@@ -201,12 +221,21 @@ class Wizard(QtWidgets.QMainWindow):
     def undosig(self):
         # get change
         change = self.undo.pop()
-        self.undone.append(change)
+        self.redo.append(change)
 
+        # undo actions
         if change['type'] == 'addevent':
             self.town.events.pop(change['prettyname'])
+            self.status.showMessage("Undo: add " + change['prettyname'])
         elif change['type'] == 'addtownspeople':
             self.town.townspeople.pop(change['prettyname'])
+            self.status.showMessage("Undo: add " + change['prettyname'])
+        elif change['type'] == 'delevent':
+            self.town.events[change['prettyname']] = change['fullname']
+            self.status.showMessage("Undo: delete " + change['prettyname'])
+        elif change['type'] == 'deltownspeople':
+            self.town.townspeople[change['prettyname']] = change['fullname']
+            self.status.showMessage("Undo: delete " + change['prettyname'])
 
         # disability claims
         self.menu['edit_redo'].setDisabled(False)
@@ -217,17 +246,22 @@ class Wizard(QtWidgets.QMainWindow):
 
     def redosig(self):
         # get change
-        change = self.undone.pop()
+        change = self.redo.pop()
         self.undo.append(change)
 
+        # redo actions
         if change['type'] == 'addevent':
             self.town.events[change['prettyname']] = change['fullname']
         elif change['type'] == 'addtownspeople':
             self.town.townspeople[change['prettyname']] = change['fullname']
+        elif change['type'] == 'delevent':
+            self.town.events.pop(change['prettyname'])
+        elif change['type'] == 'deltownspeople':
+            self.town.townspeople.pop(change['prettyname'])
 
         # disability claims
         self.menu['edit_undo'].setDisabled(False)
-        if len(self.undone) == 0: self.menu['edit_redo'].setDisabled(True)
+        if len(self.redo) == 0: self.menu['edit_redo'].setDisabled(True)
 
         # update staging view
         self.update_staging()
@@ -279,7 +313,7 @@ class Wizard(QtWidgets.QMainWindow):
 
     def log_change(self, ctype, prettyname, fullname):
         # setup
-        self.undone.clear()
+        self.redo.clear()
         change = {}
         # add to changes
         change['type'] = ctype
@@ -289,7 +323,7 @@ class Wizard(QtWidgets.QMainWindow):
 
         # disability claims
         self.menu['edit_undo'].setDisabled(False)
-        if len(self.undone) == 0: self.menu['edit_redo'].setDisabled(True)
+        if len(self.redo) == 0: self.menu['edit_redo'].setDisabled(True)
 
 if __name__ == '__main__':
     # QT IT UP
