@@ -41,20 +41,20 @@ class Example(QMainWindow):
         self.createActions()
         self.createMenus()
 
-        wizardButton = QPushButton("Wizard", mainWidget)
-        wizardButton.clicked.connect(self.showWizard)
-        wizardButton.move(0, 30)
-
+        """ Set up fillers."""
         topFill = QWidget()
         topFill.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-
         bottomFill = QWidget()
         bottomFill.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
+        wizardButton = self.createWizardButton(mainWidget)
+        closeButton = self.createCloseButton(mainWidget)
+
         layout = QVBoxLayout()
-        layout.setContentsMargins(5, 5, 5, 5)
+        layout.setContentsMargins(100, 0, 100, 0)
         layout.addWidget(topFill)
         layout.addWidget(wizardButton)
+        layout.addWidget(closeButton)
         layout.addWidget(bottomFill)
 
         self.setGeometry(300, 300, 300, 300)
@@ -69,6 +69,7 @@ class Example(QMainWindow):
         """About menu."""
         box = QMessageBox(self)
         box.setText("About goes here")
+        box.exec_()
 
     def createActions(self):
         """Create actions that go inside of main toolbar options."""
@@ -77,15 +78,29 @@ class Example(QMainWindow):
                                triggered=self.close)
 
         self.aboutAct = QAction("&About", self, statusTip="Show the about box",
-                                triggered=self.about)
+                                triggered=self.about, shortcut="Ctrl+A")
 
     def createMenus(self):
         """Generate Menubar and populate."""
-        self.fileMenu = self.menuBar().addMenu("&File")
+        self.mainMenuBar = self.menuBar()
+        self.mainMenuBar.setNativeMenuBar(False)
+        self.fileMenu = self.mainMenuBar.addMenu("&File")
         self.fileMenu.addAction(self.exitAct)
         self.fileMenu.addAction(self.aboutAct)
 
         self.editMenu = self.menuBar().addMenu("&Edit")
+
+    def createWizardButton(self, widget):
+        """Create buttons for menu."""
+        self.wizardButton = QPushButton("Wizard", widget)
+        self.wizardButton.clicked.connect(self.showWizard)
+        return self.wizardButton
+
+    def createCloseButton(self, widget):
+        """Create close button."""
+        self.closeButton = QPushButton("Close", widget)
+        self.closeButton.clicked.connect(self.close)
+        return self.closeButton
 
     def showWizard(self):
         """Change window to wizard."""
