@@ -14,9 +14,7 @@ class Town:
         self.stats = {}
         self.active = False
 
-    def new(self, name):
-        self.active = True
-        self.data['name'] = name
+    def new(self):
         self.data['people'] = {}
         self.data['events'] = {}
     
@@ -27,12 +25,14 @@ class Town:
 
     def clear(self):
         self.data.clear()
-        self.events.clear()
-        self.people.clear()
+        self.mods.clear()
         self.active = False
 
     def add(self, path):
-        # get partial name
+        # indicate changes have been made
+        self.active = True
+
+        # get current directory for string manipulation
         # TODO: error check for .json
         curr = os.path.dirname(os.path.abspath(__file__))
 
@@ -57,24 +57,29 @@ class Town:
         # TODO: actually error check
         return True
 
-    def build(self, fn):
-        for i in self.mods:
-            self.data.update(self.mods[i]['data'])
+    def build(self, tn, fn):
+        if self.active:
+            # make changes
+            self.data['name'] = tn
 
-        with open(fn, 'w') as fp:
-            json.dump(self.data, fp)
+            for i in self.mods:
+                if 'people' in self.mods[i]['data']:
+                    self.data['people'].update(self.mods[i]['data']['people'])
+                if 'events' in self.mods[i]['data']:
+                    self.data['events'].update(self.mods[i]['data']['events'])
 
-        # reset
-        self.active = False
+            # write the file
+            with open(fn, 'w') as fp:
+                json.dump(self.data, fp)
+
+            # reset
+            self.active = False
+
+            # return success
+            return True
+        else: return False
 
     ## get functions
-
-    # file grabbing
-    def get_event_files(self):
-        return glob.glob('data/event.*.json')
-
-    def get_people_files(self):
-        return glob.glob('data/people.*.json')
 
     # data grabbing
     def get_people(self):

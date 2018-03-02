@@ -1,6 +1,6 @@
 {
     "name": "Ye Olden Towne",
-    "townspeople": {
+    "people": {
         "Farmer": {
             "Nearly starved during the winter of %y": 10,
             "Made extra coin from a bountiful harvest": 10,

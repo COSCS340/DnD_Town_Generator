@@ -193,7 +193,7 @@ class Wizard(QtWidgets.QMainWindow):
         index = self.widgets['tree'].currentIndex()
         path = self.models['tree'].filePath(index)
 
-        # adds the files to the town to be written at the build stage
+        # adds the file(s) to the town to be written at the build stage
         self.recursive_add(path)
 
     def delsig(self):
@@ -209,17 +209,22 @@ class Wizard(QtWidgets.QMainWindow):
 
     def newsig(self):
         if self.town.active:
-            reply = QMessageBox.question(self, 'Are you sure?', "Town already loaded. Continue?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-            if reply == QMessageBox.Yes:
-                # clear
-                self.town.clear()
-                self.changes.clear()
-                
-                # reset stuff
-                self.widgets['info']['towntext'].setText('')
-                self.menu['edit_undo'].setDisabled(True)
-                self.menu['edit_redo'].setDisabled(True)
-                self.update_staging()
+            reply = QMessageBox.question(self, 'Are you sure?', "Changes have been made. Continue?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if reply == QMessageBox.No: return
+
+        # clear
+        self.town.clear()
+        self.changes.clear()
+        
+        # reset stuff
+        self.widgets['info']['towntext'].setText('')
+        self.menu['edit_undo'].setDisabled(True)
+        self.menu['edit_redo'].setDisabled(True)
+
+        # new stuff and update
+        self.town.new()
+        self.status.showMessage('New town loaded')
+        self.update_staging()
 
     def loadsig(self):
         if self.town.active:
@@ -231,16 +236,22 @@ class Wizard(QtWidgets.QMainWindow):
             self.load_town()
     
     def buildsig(self):
-        # check if town loaded
-        if not self.town.active:
-            self.town.new(self.widgets['info']['towntext'].text())
+        # get town name
+        townname = self.widgets['info']['towntext'].text()
 
-        # save it
-        name, _ = QFileDialog.getSaveFileName(self, 'Save File', './towns')
-        if name != '':
-            if name[-5:] != '.json': name = name + '.json'
-            self.town.build(name)
-            self.status.showMessage('Saved to ' + name)
+        # check if town loaded and name given
+        if not self.town.active:
+            self.status.showMessage('Nothing to save')
+        elif townname == '':
+            self.status.showMessage('Need a town name to save')
+        else:
+            # save it
+            filename, _ = QFileDialog.getSaveFileName(self, 'Save File', './towns')
+            if filename != '':
+                if filename[-5:] != '.json': filename = filename + '.json'
+                success = self.town.build(townname, filename)
+                if success: self.status.showMessage('Saved to ' + filename)
+                else: self.status.showMessage('Something happened.')
 
     def undosig(self):
         # get change
