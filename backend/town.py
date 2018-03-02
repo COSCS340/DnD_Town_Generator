@@ -3,21 +3,21 @@
 # Purpose: Compiles and/or edits a town
 
 # TODO: Add error checking
+# TODO: 
 
-import json
-import glob
+import os, glob, json
 
 class Town:
     def __init__(self):
         self.data = {}
-        self.events = {}
-        self.townspeople = {}
+        self.mods = {}
+        self.stats = {}
         self.active = False
 
     def new(self, name):
         self.active = True
         self.data['name'] = name
-        self.data['townspeople'] = {}
+        self.data['people'] = {}
         self.data['events'] = {}
     
     def load(self, fn):
@@ -25,26 +25,47 @@ class Town:
         with open(fn, 'r') as fp:
             self.data = json.load(fp)
 
-    def build(self, fn):
-        for i in self.events:
-            self.add_event_file(self.events[i])
-        for i in self.townspeople:
-            self.add_townspeople_file(self.townspeople[i])
-        with open(fn, 'w') as fp:
-            json.dump(self.data, fp)
-        self.active = False
-    
     def clear(self):
         self.data.clear()
+        self.events.clear()
+        self.people.clear()
         self.active = False
 
-    def add_event_file(self, fn):
-        event = json.load(open(fn))
-        self.data['events'].update(event)
+    def add(self, path):
+        # get partial name
+        # TODO: error check for .json
+        curr = os.path.dirname(os.path.abspath(__file__))
 
-    def add_townspeople_file(self, fn):
-        tp = json.load(open(fn))
-        self.data['townspeople'].update(tp)
+        # get partial but still unique path
+        part = path[len(curr)+6:]
+
+        # open file
+        # TODO: error check this
+        f = json.load(open(path))
+
+        # add
+        self.mods[part] = {}
+        self.mods[part]['path'] = path
+        self.mods[part]['data'] = f
+
+        # TODO: actually error check
+        return part
+
+    def remove(self, path):
+        self.mods.pop(path)
+
+        # TODO: actually error check
+        return True
+
+    def build(self, fn):
+        for i in self.mods:
+            self.data.update(self.mods[i]['data'])
+
+        with open(fn, 'w') as fp:
+            json.dump(self.data, fp)
+
+        # reset
+        self.active = False
 
     ## get functions
 
@@ -52,9 +73,9 @@ class Town:
     def get_event_files(self):
         return glob.glob('data/event.*.json')
 
-    def get_townspeople_files(self):
-        return glob.glob('data/townspeople.*.json')
+    def get_people_files(self):
+        return glob.glob('data/people.*.json')
 
     # data grabbing
-    def get_townspeople(self):
-        return self.data['townspeople'].keys()
+    def get_people(self):
+        return self.data['people'].keys()

@@ -1,0 +1,17 @@
+{
+    "events": {
+        "dragon attack": {
+            "description": "A dragon attacks the town",
+            "outcomes": {
+                "town destroyed": {
+                    "description": "The town was destroyed",
+                    "chance": 50
+                },
+                "heavy damage": {
+                    "description": "The town was heavily damaged",
+                    "chance": 40
+                }
+            }
+        }
+    }
+}

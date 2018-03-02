@@ -1,0 +1,25 @@
+{
+    "people": {
+        "Farmer": {
+            "Nearly starved during the winter of %y": 10,
+            "Made extra coin from a bountiful harvest": 10,
+            "An unknown party salted his fields": 5,
+            "Lost a finger to the pigs": 1
+        },
+        "Fisherman": {
+            "Lost his boat to hostile aquatic life": 10,
+            "He swears that he saw a Kracken that day.": 10
+        },
+
+        "Guard": {
+            "Lost a hand in a fight with a theif.": 5,
+            "Died fighting against cultists.": 4,
+            "Got a promotion.": 10
+        },
+        "Hunter": {
+            "Badly injured by a wild boar.": 20,
+            "Gained a scar from a run-in with a bear.": 23,
+            "Contracted licanthropy while in the forest.": 12
+        }
+    }
+}

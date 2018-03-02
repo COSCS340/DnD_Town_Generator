@@ -8,18 +8,18 @@ import os, sys, glob
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import *
 from town import Town
+from changes import Changes
 
 
 class Wizard(QtWidgets.QMainWindow):
     def __init__(self):
         # variables
         super().__init__()
-        self.title = 'D&D Town Wizard'
+        self.title = 'D&D Town Wizard (Beta)'
         self.left = 10
         self.top = 10
         self.width = 800
         self.height = 400
-        self.town = Town()
 
         # init
         self.initUI()
@@ -31,9 +31,12 @@ class Wizard(QtWidgets.QMainWindow):
         # variables
         self.models = {}
         self.widgets = {}
+        self.layouts = {}
         self.menu = {}
         self.undo = []
         self.redo = []
+        self.town = Town()
+        self.changes = Changes()
         
         # add elements and setup layout
         self.setupInterface()
@@ -50,36 +53,43 @@ class Wizard(QtWidgets.QMainWindow):
         self.widgets['new'] = QPushButton('New')
         self.widgets['edit'] = QPushButton('Edit')
         self.widgets['add'] = QPushButton('Add')
-        self.widgets['newtown'] = QPushButton('New Town')
-        self.widgets['loadtown'] = QPushButton('Load Town')
         self.widgets['townlabel'] = QLabel(self)
         self.widgets['info'] = {}
         self.widgets['info']['object'] = QGroupBox('Stats')
         self.widgets['info']['townlabel'] = QLabel(self)
         self.widgets['info']['towntext'] = QLineEdit(self)
+        self.widgets['info']['peoplelabel'] = QLabel(self)
+        self.widgets['info']['eventlabel'] = QLabel(self)
         self.widgets['info']['build'] = QPushButton('Build Town')
 
         # layouts
-        gridlayout = QGridLayout()
-        vboxlayout = QGridLayout()
-        stagelayout = QVBoxLayout()
+        self.layouts['main'] = QGridLayout()
+        self.layouts['towninfo'] = QGridLayout()
+        self.layouts['stage'] = QVBoxLayout()
         
         # layout widgets
-        mainbox = QWidget(self)
+        self.mainbox = QWidget(self)
+        self.editbox = QWidget(self)
 
-        # set main layout
-        self.setCentralWidget(mainbox)
-        mainbox.setLayout(gridlayout)
-        self.widgets['stagebox'].setLayout(stagelayout)
+        # set layouts
+        self.mainbox.setLayout(self.layouts['main'])
+
+        # set main window
+        self.setCentralWidget(self.mainbox)
+
+        # sub-layouts
+        self.widgets['stagebox'].setLayout(self.layouts['stage'])
+        self.widgets['info']['object'].setLayout(self.layouts['towninfo'])
         
-        # set town info box layout
-        self.widgets['info']['object'].setLayout(vboxlayout)
-
         # models
         self.models['tree'] = QFileSystemModel()
 
+        ### widget setup ###
+
         # town name label widget setup
         self.widgets['info']['townlabel'].setText("Town Name")
+        self.widgets['info']['peoplelabel'].setText("Number of residents")
+        self.widgets['info']['eventlabel'].setText("Number of Events")
 
         # staging area widget setup
         self.widgets['stage'].doubleClicked.connect(self.delsig)
@@ -98,28 +108,28 @@ class Wizard(QtWidgets.QMainWindow):
         
         # signals
         self.widgets['add'].clicked.connect(self.addsig)
-        self.widgets['newtown'].clicked.connect(self.newsig)
-        self.widgets['loadtown'].clicked.connect(self.loadsig)
         self.widgets['info']['build'].clicked.connect(self.buildsig)
 
         # add to grid layout
-        gridlayout.addWidget(self.widgets['tree'],0,0,1,3)
-        gridlayout.addWidget(self.widgets['new'],1,0)
-        gridlayout.addWidget(self.widgets['edit'],1,1)
-        gridlayout.addWidget(self.widgets['add'],1,2)
-        gridlayout.addWidget(self.widgets['stagebox'],0,3,2,1)
-        gridlayout.addWidget(self.widgets['info']['object'],0,4,2,1)
+        self.layouts['main'].addWidget(self.widgets['tree'],0,0,1,3)
+        self.layouts['main'].addWidget(self.widgets['new'],1,0)
+        self.layouts['main'].addWidget(self.widgets['edit'],1,1)
+        self.layouts['main'].addWidget(self.widgets['add'],1,2)
+        self.layouts['main'].addWidget(self.widgets['stagebox'],0,3,2,1)
+        self.layouts['main'].addWidget(self.widgets['info']['object'],0,4,2,1)
         
-        vboxlayout.addWidget(self.widgets['info']['townlabel'],0,0)
-        vboxlayout.addWidget(self.widgets['info']['towntext'],0,1)
-        vboxlayout.addWidget(self.widgets['info']['build'],2,0,1,2)
+        self.layouts['towninfo'].addWidget(self.widgets['info']['townlabel'],0,0)
+        self.layouts['towninfo'].addWidget(self.widgets['info']['towntext'],0,1)
+        self.layouts['towninfo'].addWidget(self.widgets['info']['peoplelabel'],1,0)
+        self.layouts['towninfo'].addWidget(self.widgets['info']['eventlabel'],2,0)
+        self.layouts['towninfo'].addWidget(self.widgets['info']['build'],4,0,1,2)
 
-        stagelayout.addWidget(self.widgets['stage'])
+        self.layouts['stage'].addWidget(self.widgets['stage'])
 
         # grid layout options
-        gridlayout.setColumnStretch(3, 3)
-        gridlayout.setColumnStretch(4, 4)
-        vboxlayout.setRowStretch(1, 4)
+        self.layouts['main'].setColumnStretch(3,3)
+        self.layouts['main'].setColumnStretch(4,4)
+        self.layouts['towninfo'].setRowStretch(3,4)
 
     def setupMenu(self):
         self.topbar = self.menuBar()
@@ -127,75 +137,89 @@ class Wizard(QtWidgets.QMainWindow):
         
         # status bar
         self.status.showMessage("Welcome. Load a town or start fresh.")
-        
-        # file menu
-        file_menu = self.topbar.addMenu('File')
-        self.menu['file_open'] = QtWidgets.QAction('Open', self)
-        self.menu['file_close'] = QtWidgets.QAction('Close', self)
-        self.menu['file_build'] = QtWidgets.QAction('Build', self)
 
+        ### file menu ###
+
+        # widgets
+        file_menu = self.topbar.addMenu('&File')
+        self.menu['file_new'] = QtWidgets.QAction('&New', self, shortcut="Ctrl+N")
+        self.menu['file_open'] = QtWidgets.QAction('&Open', self, shortcut="Ctrl+O")
+        self.menu['file_build'] = QtWidgets.QAction('&Build', self, shortcut="Ctrl+S")
+        self.menu['file_close'] = QtWidgets.QAction('&Quit', self, shortcut="Ctrl+Q")
+
+        # build file menu
+        file_menu.addAction(self.menu['file_new'])
         file_menu.addAction(self.menu['file_open'])
         file_menu.addAction(self.menu['file_build'])
         file_menu.addSeparator()
         file_menu.addAction(self.menu['file_close'])
-        
+
+        # get triggered
+        self.menu['file_new'].triggered.connect(self.newsig)
         self.menu['file_open'].triggered.connect(self.loadsig)
         self.menu['file_build'].triggered.connect(self.buildsig)
+        self.menu['file_close'].triggered.connect(self.close)
         
-        # edit menu
-        edit_menu = self.topbar.addMenu('Edit')
-        self.menu['edit_undo'] = QtWidgets.QAction('Undo', self)
-        self.menu['edit_redo'] = QtWidgets.QAction('Redo', self)
+        ### edit menu ###
 
+        # widgets
+        edit_menu = self.topbar.addMenu('&Edit')
+        self.menu['edit_undo'] = QtWidgets.QAction('Undo', self, shortcut="Ctrl+Z")
+        self.menu['edit_redo'] = QtWidgets.QAction('Redo', self, shortcut="Ctrl+Y")
+
+        # build edit menu
         edit_menu.addAction(self.menu['edit_undo'])
         edit_menu.addAction(self.menu['edit_redo'])
         self.menu['edit_undo'].setDisabled(True)
         self.menu['edit_redo'].setDisabled(True)
 
+        # get triggered
         self.menu['edit_undo'].triggered.connect(self.undosig)
         self.menu['edit_redo'].triggered.connect(self.redosig)
         
-        # about menu
-        about_menu = self.topbar.addMenu('Help')
+        ### help menu ###
 
-    ## signals
+        # widgets
+        help_menu = self.topbar.addMenu('&Help')
+        self.menu['help_about'] = QtWidgets.QAction('&About', self)
+
+        # build
+        help_menu.addAction(self.menu['help_about'])
+
+    ### signals ###
     
     def addsig(self):
-        # get file name
+        # get file name from tree
         index = self.widgets['tree'].currentIndex()
-        fullname = self.models['tree'].filePath(index)
+        path = self.models['tree'].filePath(index)
 
         # adds the files to the town to be written at the build stage
-        self.add_file(fullname)
-
-        # update staging view
-        self.update_staging()
+        self.recursive_add(path)
 
     def delsig(self):
         # get file name
-        prettyname = self.widgets['stage'].selectedIndexes()[0].data()
+        path = self.widgets['stage'].selectedIndexes()[0].data()
 
         # remove it
-        ftype = prettyname[:prettyname.find('.')]
-        if ftype == 'event':
-            fullname = self.town.events[prettyname]
-            self.town.events.pop(prettyname)
-            self.log_change('delevent', prettyname, fullname)
-        if ftype == 'townspeople':
-            fullname = self.town.townspeople[prettyname]
-            self.town.townspeople.pop(prettyname)
-            self.log_change('deltownspeople', prettyname, fullname)
+        success = self.town.remove(path)
 
-        self.update_staging()
-    
+        if success:
+            self.status.showMessage('Removed: ' + path)
+            self.log_change('remove', path)
+
     def newsig(self):
         if self.town.active:
-            reply = QMessageBox.question(self, 'Error', "A town is already loaded.  Do you want to start over?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            reply = QMessageBox.question(self, 'Are you sure?', "Town already loaded. Continue?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if reply == QMessageBox.Yes:
+                # clear
                 self.town.clear()
-                self.new_town()
-        else:
-            self.new_town()
+                self.changes.clear()
+                
+                # reset stuff
+                self.widgets['info']['towntext'].setText('')
+                self.menu['edit_undo'].setDisabled(True)
+                self.menu['edit_redo'].setDisabled(True)
+                self.update_staging()
 
     def loadsig(self):
         if self.town.active:
@@ -220,44 +244,31 @@ class Wizard(QtWidgets.QMainWindow):
 
     def undosig(self):
         # get change
-        change = self.undo.pop()
-        self.redo.append(change)
+        change = self.changes.undo()
 
-        # undo actions
-        if change['type'] == 'addevent':
-            self.town.events.pop(change['prettyname'])
-            self.status.showMessage("Undo: add " + change['prettyname'])
-        elif change['type'] == 'addtownspeople':
-            self.town.townspeople.pop(change['prettyname'])
-            self.status.showMessage("Undo: add " + change['prettyname'])
-        elif change['type'] == 'delevent':
-            self.town.events[change['prettyname']] = change['fullname']
-            self.status.showMessage("Undo: delete " + change['prettyname'])
-        elif change['type'] == 'deltownspeople':
-            self.town.townspeople[change['prettyname']] = change['fullname']
-            self.status.showMessage("Undo: delete " + change['prettyname'])
+        if change['action'] == 'add':
+            self.town.remove(change['path'])
+        elif change['action'] == 'remove':
+            self.town.add(change['path'])
+        
+        # notify user
+        self.status.showMessage("Undo: add " + change['path'])
 
         # disability claims
         self.menu['edit_redo'].setDisabled(False)
-        if len(self.undo) == 0: self.menu['edit_undo'].setDisabled(True)
+        if self.changes.canUndo() == False: self.menu['edit_undo'].setDisabled(True)
 
         # update staging view
         self.update_staging()
 
     def redosig(self):
         # get change
-        change = self.redo.pop()
-        self.undo.append(change)
+        change = self.changes.redo()
 
-        # redo actions
-        if change['type'] == 'addevent':
-            self.town.events[change['prettyname']] = change['fullname']
-        elif change['type'] == 'addtownspeople':
-            self.town.townspeople[change['prettyname']] = change['fullname']
-        elif change['type'] == 'delevent':
-            self.town.events.pop(change['prettyname'])
-        elif change['type'] == 'deltownspeople':
-            self.town.townspeople.pop(change['prettyname'])
+        if change['action'] == 'add':
+            self.town.add(change['path'])
+        elif change['action'] == 'remove':
+            self.town.remove(change['path'])
 
         # disability claims
         self.menu['edit_undo'].setDisabled(False)
@@ -270,38 +281,7 @@ class Wizard(QtWidgets.QMainWindow):
 
     def update_staging(self):
         self.widgets['stage'].clear()
-        self.widgets['stage'].addItems(self.town.events.keys() | self.town.townspeople.keys())
-        
-
-    def add_file(self, fullname):
-        # get partial (pretty) file name and type
-        prettyname = fullname[(fullname.rfind('/') + 1):]
-        ftype = prettyname[:prettyname.find('.')]
-
-        # folder (recursive)
-        if os.path.isdir(fullname):
-            contents = glob.glob(fullname + '/*')
-            for i in contents: 
-                self.add_file(i)
-
-        # TODO check for .json extension
-
-        # event
-        elif ftype == 'event':
-            # if not already selected
-            if prettyname not in self.town.events:
-                self.town.events[prettyname] = fullname
-                self.status.showMessage('Event added')
-                self.log_change('addevent', prettyname, fullname)
-            else: self.status.showMessage('Event already added')
-        # townspeople  
-        elif ftype == 'townspeople':
-            if prettyname not in self.town.townspeople:
-                self.town.townspeople[prettyname] = fullname
-                self.status.showMessage('Townspeople added')
-                self.log_change('addtownspeople', prettyname, fullname)
-            else: self.status.showMessage('Townspeople already added')
-        else: self.status.showMessage('Not a valid file')
+        self.widgets['stage'].addItems(self.town.mods.keys())
 
     def load_town(self):
         name, _ = QFileDialog.getOpenFileName(self, 'Open File', './towns')
@@ -311,19 +291,28 @@ class Wizard(QtWidgets.QMainWindow):
             self.widgets['info']['towntext'].setText(self.town.data['name'])
         else: self.status.showMessage("No town loaded")
 
-    def log_change(self, ctype, prettyname, fullname):
-        # setup
-        self.redo.clear()
-        change = {}
-        # add to changes
-        change['type'] = ctype
-        change['prettyname'] = prettyname
-        change['fullname'] = fullname
-        self.undo.append(change)
+    def recursive_add(self, path):
+        # recursion
+        if os.path.isdir(path):
+            contents = glob.glob(path + '/*')
+            for i in contents: 
+                self.recursive_add(i)
+        else:
+            pathkey = self.town.add(path)
 
-        # disability claims
+            self.log_change('add', pathkey)
+
+            if pathkey != '': self.status.showMessage('Added: ' + path)
+            else: self.status.showMessage('Error: ' + fullname + ' is not valid')
+
+    def log_change(self, action, path):
+        # log it
+        self.changes.log({'action': 'add', 'path': path})
+
+        # update gui
         self.menu['edit_undo'].setDisabled(False)
-        if len(self.redo) == 0: self.menu['edit_redo'].setDisabled(True)
+        if self.changes.canRedo() == False: self.menu['edit_redo'].setDisabled(True)
+        self.update_staging()
 
 if __name__ == '__main__':
     # QT IT UP
