@@ -9,8 +9,8 @@ class Thing(QWidget):
     def __init__(self):
         super().__init__()
         scriptDir = os.path.dirname(os.path.realpath(__file__))
-        print (scriptDir + os.path.sep + "help.ico")
-        self.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'help.ico'))
+        print (scriptDir + os.path.sep + "help.png")
+        self.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + './help.png'))
         self.initUI()
 
     def initUI(self):
