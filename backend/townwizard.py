@@ -277,7 +277,7 @@ class Wizard(QtWidgets.QMainWindow):
         change = self.changes.redo()
 
         if change['action'] == 'add':
-            self.town.add(change['path'])
+            self.town.add(change['path']) # FIXME: ADD NEEDS FULL PATH
         elif change['action'] == 'remove':
             self.town.remove(change['path'])
 
