@@ -1,9 +1,19 @@
+# test.py
+# Author:  Ben Johnson
+# Purpose: Provide a temporary wrapper for townwizard and also test
+#          View/MultiView function
+
 import sys
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import *
 import json
+
+# multiview classes
 from multiview import View, MultiView
-from townwizardwid import Wizard
+
+# widgets
+from townwizard import TownWizard
+
 
 class Test(MultiView):
     def __init__(self):
@@ -32,7 +42,7 @@ class Test(MultiView):
         self.case.setLayout(self.layout)
 
         self.v1 = view1(self)
-        self.v2 = Wizard(self)
+        self.v2 = TownWizard(self)
 
         self.addView(self.v1)
         self.addView(self.v2)
@@ -48,7 +58,7 @@ class Test(MultiView):
         self.layout.addWidget(self.getViewer(), 1,0,1,3)
         self.layout.setColumnStretch(2,4)
 
-        self.setCurrentView(self.v1)
+        self.setCurrentView(self.v2)
         self.setCentralWidget(self.case)
 
     def homesig(self):

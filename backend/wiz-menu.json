@@ -23,11 +23,13 @@
     "&Edit": {
         "&Undo": {
             "signal": "undosig",
-            "hotkey": "Ctrl+Z"
+            "hotkey": "Ctrl+Z",
+            "disabled": "True"
         },
         "&Redo": {
             "signal": "redosig",
-            "hotkey": "Ctrl+Y"
+            "hotkey": "Ctrl+Y",
+            "disabled": "True"
         }
     },
     "&Help": {

@@ -70,4 +70,6 @@ class MultiView(QtWidgets.QMainWindow):
                 self.menu[m][s] = QtWidgets.QAction(s, self, shortcut=hotkey)
                 if 'signal' in menu[m][s]:
                     self.menu[m][s].triggered.connect(getattr(self.currView, menu[m][s]['signal']))
+                if 'disabled' in menu[m][s]:
+                    if menu[m][s]['disabled'] == "True": self.menu[m][s].setDisabled(True)
                 tmp.addAction(self.menu[m][s])
