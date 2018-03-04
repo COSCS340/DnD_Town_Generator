@@ -1,0 +1,25 @@
+Terminology:
+	VIC: View-Inheriting Class
+
+MultiView:
+	addView(VIC)
+	
+	// setters
+	setCurrentView(VIC[, updatemenu): sets 
+	
+	// getters
+	getCurrentView(): returns current VIC's widget
+	getViewer(): returns viewer widget so you can place it wherever you want
+	
+	// setters
+	setmenu(VIC.getMenu()): not user called
+	
+View:
+	loadMenu('path/to/json'): loads a json file representation of menu bar
+	
+	// getters
+	getMenu(): not user called
+	getWidget(): returns the main widget of the class
+	
+	// setters
+	setViewLayout(layout): sets the layout of the class's main widget

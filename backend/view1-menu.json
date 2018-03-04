@@ -1,0 +1,8 @@
+{
+    "&File": {
+        "&Open": {
+            "signal": "opensig",
+            "hotkey": "Ctrl+O"
+        }
+    }
+}
