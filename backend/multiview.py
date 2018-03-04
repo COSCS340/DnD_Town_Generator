@@ -3,8 +3,11 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import *
 
 class View(QWidget):
-    def __init__(self):
+    def __init__(self, mvp):
         super().__init__()
+
+        # da real Multi View Parent
+        self.mvp = mvp
         self.ViewMainWindow = QWidget()
         self.ViewMainMenu = {}
 
@@ -20,11 +23,17 @@ class View(QWidget):
     def setViewLayout(self, layout):
         self.ViewMainWindow.setLayout(layout)
 
+    def setStatus(self, mess):
+        self.mvp.statusbar.showMessage(mess)
+
 class MultiView(QtWidgets.QMainWindow):
     def __init__(self):
         # variables
         super().__init__()
         self.MultiViewWidget = QStackedWidget()
+        self.menub = self.menuBar()
+        self.statusbar = self.statusBar()
+        self.menu = {}
 
     def addView(self, v):
         self.MultiViewWidget.addWidget(v.getWidget())

@@ -15,11 +15,8 @@ from multiview import View
 class Wizard(View):
     def __init__(self, mvp):
         # variables
-        super().__init__()
+        super().__init__(mvp)
         self.loadMenu('wiz-menu.json')
-
-        # da real Multi View Parent
-        self.mvp = mvp
 
         # init
         self.initUI()
@@ -34,6 +31,8 @@ class Wizard(View):
         self.redo = []
         self.town = Town()
         self.changes = Changes()
+
+        self.setStatus("Yep")
 
         # add elements and setup layout
         self.setupInterface()
@@ -130,14 +129,15 @@ class Wizard(View):
 
     def delsig(self):
         # get file name
-        path = self.widgets['stage'].selectedIndexes()[0].data()
+        pathkey = self.widgets['stage'].selectedIndexes()[0].data()
 
         # remove it
-        success = self.town.remove(path)
+        path = self.town.getPath(pathkey)
+        success = self.town.remove(pathkey)
 
         if success:
-            #self.status.showMessage('Removed: ' + path)
-            self.log_change('remove', path)
+            self.setStatus('Removed: ' + path)
+            self.log_change('remove', pathkey, path)
 
     def newsig(self):
         if self.town.active:
@@ -155,7 +155,7 @@ class Wizard(View):
 
         # new stuff and update
         self.town.new()
-        #self.status.showMessage('New town loaded')
+        self.status('New town loaded')
         self.update_staging()
 
     def loadsig(self):
@@ -174,34 +174,34 @@ class Wizard(View):
         # check if town loaded and name given
         if not self.town.active:
             print("placeholder to make python happy")
-            #self.status.showMessage('Nothing to save')
+            self.setStatus('Nothing to save')
         elif townname == '':
             print("placeholder")
-            #self.status.showMessage('Need a town name to save')
+            self.setStatus('Need a town name to save')
         else:
             # save it
             filename, _ = QFileDialog.getSaveFileName(self, 'Save File', './towns')
             if filename != '':
                 if filename[-5:] != '.json': filename = filename + '.json'
                 success = self.town.build(townname, filename)
-                #if success: self.status.showMessage('Saved to ' + filename)
-                #else: self.status.showMessage('Something happened.')
+                if success: self.status('Saved to ' + filename)
+                else: self.status('Something happened.')
 
     def undosig(self):
         # get change
         change = self.changes.undo()
 
         if change['action'] == 'add':
-            self.town.remove(change['path'])
+            self.town.remove(change['pathkey'])
         elif change['action'] == 'remove':
             self.town.add(change['path'])
 
         # notify user
-        #self.status.showMessage("Undo: add " + change['path'])
+        self.setStatus("Undo: add " + change['path'])
 
         # disability claims
-        self.menu['edit_redo'].setDisabled(False)
-        if self.changes.canUndo() == False: self.menu['edit_undo'].setDisabled(True)
+        self.mvp.menu['&Edit']['&Redo'].setDisabled(False)
+        if self.changes.canUndo() == False: self.mvp.menu['&Edit']['&Undo'].setDisabled(True)
 
         # update staging view
         self.update_staging()
@@ -213,11 +213,11 @@ class Wizard(View):
         if change['action'] == 'add':
             self.town.add(change['path']) # FIXME: ADD NEEDS FULL PATH
         elif change['action'] == 'remove':
-            self.town.remove(change['path'])
+            self.town.remove(change['pathkey'])
 
         # disability claims
-        #self.menu['edit_undo'].setDisabled(False)
-        #if len(self.redo) == 0: self.menu['edit_redo'].setDisabled(True)
+        self.mvp.menu['&Edit']['&Undo'].setDisabled(False)
+        if len(self.redo) == 0: self.menu['&Edit']['&Redo'].setDisabled(True)
 
         # update staging view
         self.update_staging()
@@ -245,14 +245,14 @@ class Wizard(View):
         else:
             pathkey = self.town.add(path)
 
-            self.log_change('add', pathkey)
+            self.log_change('add', pathkey, path)
 
-            #if pathkey != '': self.status.showMessage('Added: ' + path)
-            #else: self.status.showMessage('Error: ' + fullname + ' is not valid')
+            if pathkey != '': self.setStatus('Added: ' + path)
+            else: self.setStatus('Error: ' + fullname + ' is not valid')
 
-    def log_change(self, action, path):
+    def log_change(self, action, pathkey, path):
         # log it
-        self.changes.log({'action': 'add', 'path': path})
+        self.changes.log({'action': 'add', 'path': path, 'pathkey': pathkey})
 
         # update gui
         #self.menu['edit_undo'].setDisabled(False)

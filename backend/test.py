@@ -24,9 +24,6 @@ class Test(MultiView):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
-        self.menu = {}
-        self.menub = self.menuBar()
-
         # case widget
         self.case = QWidget()
 
@@ -41,23 +38,30 @@ class Test(MultiView):
         self.addView(self.v2)
 
         # real widgets
-        butt = QPushButton('PRESS ME TO TOGGLE VIEWS')
-        butt.clicked.connect(self.switchsig)
+        butt = QPushButton('Home')
+        butt.clicked.connect(self.homesig)
+        butt2 = QPushButton('Wizard')
+        butt2.clicked.connect(self.wizardsig)
 
         self.layout.addWidget(butt, 0,0)
-        self.layout.addWidget(self.getViewer(), 1,0)
+        self.layout.addWidget(butt2, 0,1)
+        self.layout.addWidget(self.getViewer(), 1,0,1,3)
+        self.layout.setColumnStretch(2,4)
 
         self.setCurrentView(self.v1)
         self.setCentralWidget(self.case)
 
-    def switchsig(self):
-        if self.getCurrentView() == self.v1.getWidget():
+    def homesig(self):
+        if self.getCurrentView() != self.v1.getWidget():
+            self.setCurrentView(self.v1)
+
+    def wizardsig(self):
+        if self.getCurrentView() != self.v2.getWidget():
             self.setCurrentView(self.v2)
-        else: self.setCurrentView(self.v1)
 
 class view1(View):
     def __init__(self, parent):
-        super().__init__()
+        super().__init__(parent)
         self.loadMenu('view1-menu.json')
 
         self.layout = QVBoxLayout()

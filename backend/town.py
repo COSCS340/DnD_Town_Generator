@@ -3,7 +3,7 @@
 # Purpose: Compiles and/or edits a town
 
 # TODO: Add error checking
-# TODO: 
+# TODO:
 
 import os, glob, json
 
@@ -17,7 +17,7 @@ class Town:
     def new(self):
         self.data['people'] = {}
         self.data['events'] = {}
-    
+
     def load(self, fn):
         self.active = True
         with open(fn, 'r') as fp:
@@ -52,10 +52,15 @@ class Town:
         return part
 
     def remove(self, path):
-        self.mods.pop(path)
+        change = self.mods.pop(path)
 
         # TODO: actually error check
         return True
+
+    def getPath(self, pathkey):
+        if pathkey in self.mods:
+            return self.mods[pathkey]['path']
+        else: return ''
 
     def build(self, tn, fn):
         if self.active:
