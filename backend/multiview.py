@@ -1,3 +1,14 @@
+'''
+The purpose of View/MultiView is to easily create separate widgets that can
+all work together to the benefit of one program
+
+Individual widgets inherit View and have the ability to set status bar messages
+and menus without the knowledge of the actual status bar
+
+The main script runs a MultiView object and passes the bars to the call (if you
+want) or inherits it
+'''
+
 import sys, os, json
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import *
@@ -27,12 +38,12 @@ class View(QWidget):
         self.mvp.statusbar.showMessage(mess)
 
 class MultiView(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self, menub=None, statusb=None):
         # variables
         super().__init__()
         self.MultiViewWidget = QStackedWidget()
-        self.menub = self.menuBar()
-        self.statusbar = self.statusBar()
+        self.menub = menub
+        self.statusbar = statusb
         self.menu = {}
 
     def addView(self, v):
@@ -49,27 +60,32 @@ class MultiView(QtWidgets.QMainWindow):
     def getViewer(self):
         return self.MultiViewWidget
 
+    def createMenuBar(self):
+        self.menub = self.menuBar()
+    def createStatusBar(self):
+        self.statusbar = self.statusBar()
     # Current limitation (probably not a big deal):
     #   cannot dynamically add to the menu
     def setmenu(self, menu):
-        # clear menu things
-        self.menub.clear()
-        self.menu.clear()
+        if self.menub != None:
+            # clear menu things
+            self.menub.clear()
+            self.menu.clear()
 
-        # build up menu
-        for m in menu:
-            self.menu[m] = {}
-            tmp = self.menub.addMenu(m)
-            for s in menu[m]:
-                if 'separator' in menu[m][s]:
-                    tmp.addSeparator()
-                    continue
-                hotkey = ''
-                if 'hotkey' in menu[m][s]:
-                    hotkey = menu[m][s]['hotkey']
-                self.menu[m][s] = QtWidgets.QAction(s, self, shortcut=hotkey)
-                if 'signal' in menu[m][s]:
-                    self.menu[m][s].triggered.connect(getattr(self.currView, menu[m][s]['signal']))
-                if 'disabled' in menu[m][s]:
-                    if menu[m][s]['disabled'] == "True": self.menu[m][s].setDisabled(True)
-                tmp.addAction(self.menu[m][s])
+            # build up menu
+            for m in menu:
+                self.menu[m] = {}
+                tmp = self.menub.addMenu(m)
+                for s in menu[m]:
+                    if 'separator' in menu[m][s]:
+                        tmp.addSeparator()
+                        continue
+                    hotkey = ''
+                    if 'hotkey' in menu[m][s]:
+                        hotkey = menu[m][s]['hotkey']
+                    self.menu[m][s] = QtWidgets.QAction(s, self, shortcut=hotkey)
+                    if 'signal' in menu[m][s]:
+                        self.menu[m][s].triggered.connect(getattr(self.currView, menu[m][s]['signal']))
+                    if 'disabled' in menu[m][s]:
+                        if menu[m][s]['disabled'] == "True": self.menu[m][s].setDisabled(True)
+                    tmp.addAction(self.menu[m][s])

@@ -8,12 +8,9 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import *
 import json
 
-# multiview classes
-from multiview import View, MultiView
-
-# widgets
+from multiview import MultiView
 from townwizard import TownWizard
-
+from sampleview import view1
 
 class Test(MultiView):
     def __init__(self):
@@ -24,6 +21,9 @@ class Test(MultiView):
         self.top = 10
         self.width = 800
         self.height = 400
+
+        self.createMenuBar()
+        self.createStatusBar()
 
         # init
         self.initUI()
@@ -41,11 +41,11 @@ class Test(MultiView):
         self.layout = QGridLayout()
         self.case.setLayout(self.layout)
 
-        self.v1 = view1(self)
-        self.v2 = TownWizard(self)
+        self.home = view1(self)
+        self.wiz = TownWizard(self)
 
-        self.addView(self.v1)
-        self.addView(self.v2)
+        self.addView(self.home)
+        self.addView(self.wiz)
 
         # real widgets
         butt = QPushButton('Home')
@@ -58,31 +58,18 @@ class Test(MultiView):
         self.layout.addWidget(self.getViewer(), 1,0,1,3)
         self.layout.setColumnStretch(2,4)
 
-        self.setCurrentView(self.v2)
+        self.setCurrentView(self.home)
         self.setCentralWidget(self.case)
 
     def homesig(self):
-        if self.getCurrentView() != self.v1.getWidget():
-            self.setCurrentView(self.v1)
+        if self.getCurrentView() != self.home.getWidget():
+            self.setCurrentView(self.home)
 
     def wizardsig(self):
-        if self.getCurrentView() != self.v2.getWidget():
-            self.setCurrentView(self.v2)
+        if self.getCurrentView() != self.wiz.getWidget():
+            self.setCurrentView(self.wiz)
 
-class view1(View):
-    def __init__(self, parent):
-        super().__init__(parent)
-        self.loadMenu('view1-menu.json')
 
-        self.layout = QVBoxLayout()
-        self.setViewLayout(self.layout)
-
-        butt = QPushButton('PRESS ME')
-        #butt.clicked.connect(parent.setCurrentWin(parent.v2))
-        self.layout.addWidget(butt)
-
-    def opensig(self):
-        print('VIEW 1 OPEN CLICK')
 
 if __name__ == '__main__':
     # QT IT UP

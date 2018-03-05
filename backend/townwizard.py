@@ -32,7 +32,7 @@ class TownWizard(View):
         self.town = Town()
         self.changes = Changes()
 
-        self.setStatus("Yep")
+        self.town.new()
 
         # add elements and setup layout
         self.setupInterface()
@@ -60,6 +60,10 @@ class TownWizard(View):
         self.layouts['towninfo'] = QGridLayout()
         self.layouts['stage'] = QVBoxLayout()
 
+        # switchy boi
+        self.layouts['case'] = QVBoxLayout()
+        self.switcher = QStackedWidget()
+        #self.layouts['case'].addWiget(self.switcher) # STOPPED HERE
         # set view layout
         self.setViewLayout(self.layouts['main'])
 
@@ -185,8 +189,8 @@ class TownWizard(View):
             if filename != '':
                 if filename[-5:] != '.json': filename = filename + '.json'
                 success = self.town.build(townname, filename)
-                if success: self.status('Saved to ' + filename)
-                else: self.status('Something happened.')
+                if success: self.setStatus('Saved to ' + filename)
+                else: self.setStatus('Something happened.')
 
     def undosig(self):
         # get change
