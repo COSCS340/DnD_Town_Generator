@@ -10,7 +10,7 @@ import json
 
 from utils.multiview import MultiView
 from views.townwizard import TownWizard
-from sampleview import view1
+from views.sampleview import view1
 
 class Test(MultiView):
     def __init__(self):

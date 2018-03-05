@@ -28,6 +28,9 @@ class View(QWidget):
     def getMenu(self):
         return self.ViewMainMenu
 
+    def updateMenu(self):
+        self.mvp.setmenu(self.getMenu())
+
     def getWidget(self):
         return self.ViewMainWindow
 
@@ -64,6 +67,7 @@ class MultiView(QtWidgets.QMainWindow):
         self.menub = self.menuBar()
     def createStatusBar(self):
         self.statusbar = self.statusBar()
+
     # Current limitation (probably not a big deal):
     #   cannot dynamically add to the menu
     def setmenu(self, menu):

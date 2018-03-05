@@ -12,16 +12,18 @@ class Changes:
         if len(self.redos) != 0: self.redos.clear()
 
     def undo(self):
-        change = self.undos.pop()
-        self.redos.append(change)
-
-        return change
+        if len(self.undos) != 0:
+            change = self.undos.pop()
+            self.redos.append(change)
+            return change
+        else: return None
 
     def redo(self):
-        change = self.redos.pop()
-        self.undos.append(change)
-
-        return change
+        if len(self.redos) != 0:
+            change = self.redos.pop()
+            self.undos.append(change)
+            return change
+        else: return None
 
     def canUndo(self):
         if len(self.undos) == 0: return False
