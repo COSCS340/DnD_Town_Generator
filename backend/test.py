@@ -8,8 +8,8 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import *
 import json
 
-from multiview import MultiView
-from townwizard import TownWizard
+from utils.multiview import MultiView
+from views.townwizard import TownWizard
 from sampleview import view1
 
 class Test(MultiView):

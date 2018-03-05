@@ -7,16 +7,17 @@
 import os, sys, glob
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import *
-from town import Town
-from changes import Changes
-from multiview import View
+
+from utils.town import Town
+from utils.changes import Changes
+from utils.multiview import View
 
 
 class TownWizard(View):
     def __init__(self, mvp):
         # variables
         super().__init__(mvp)
-        self.loadMenu('wiz-menu.json')
+        self.loadMenu('config/wiz-menu.json')
 
         # init
         self.initUI()
