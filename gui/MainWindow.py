@@ -5,7 +5,8 @@ This is currently being worked on by Dakota Sanders.
 """
 
 from PyQt5.QtWidgets import (QMainWindow, QAction, QPushButton, QApplication,
-                             QMessageBox, QVBoxLayout, QWidget, QSizePolicy)
+                             QMessageBox, QVBoxLayout, QWidget, QSizePolicy,
+                             QStackedWidget)
 import sys
 
 
@@ -35,8 +36,12 @@ class Example(QMainWindow):
             mac = False
         '''
 
+        widgetStack = QStackedWidget()
+
         mainWidget = QWidget()
         self.setCentralWidget(mainWidget)
+
+        widgetStack.addWidget(mainWidget)
 
         self.createActions()
         self.createMenus()
