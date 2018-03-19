@@ -32,3 +32,6 @@ Jeff the Beekeep: (name+occupation generated randomly)
  Also there may be other fields to add later, if we intend to generate a map then each person will need a field for residence and place 
  of work.
  
+Basically, there are for major catagories of what we're supplying to the user: Town Meta, Personal Meta, Town Events, Personal Events.
+town events are what produce the town meta, while personal events will produce personal meta. Also all people will have personal events
+that correspond to each town event.
