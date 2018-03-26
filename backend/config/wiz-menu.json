@@ -1,0 +1,40 @@
+{
+    "&File": {
+        "&New": {
+            "signal": "newsig",
+            "hotkey": "Ctrl+N"
+        },
+        "&Open": {
+            "signal": "loadsig",
+            "hotkey": "Ctrl+O"
+        },
+        "&Build": {
+            "signal": "buildsig",
+            "hotkey": "Ctrl+S"
+        },
+        "Separator1": {
+            "separator": "True"
+        },
+        "&Quit": {
+            "signal": "close",
+            "hotkey": "Ctrl+Q"
+        }
+    },
+    "&Edit": {
+        "&Undo": {
+            "signal": "undosig",
+            "hotkey": "Ctrl+Z",
+            "disabled": "True"
+        },
+        "&Redo": {
+            "signal": "redosig",
+            "hotkey": "Ctrl+Y",
+            "disabled": "True"
+        }
+    },
+    "&Help": {
+        "&About": {
+
+        }
+    }
+}

@@ -1,0 +1,37 @@
+Name: Honigburg (Name either generated or supplid by user)
+Population: 10,000 (supplied by user)
+Govenance: High Noble King/Emperor (selected by user or generated randomly)
+Races: 80% Human 7% Dwarf 9% Elf 3% Half-Orc 1% Other (selected by user or generated randomly)
+Location: Hills
+Climate: Tropical
+Major Industry: Farming: Bees. (Generated)
+Minor Industries: Farming: Berries, Flower Plants, Preserved Foods, Mead. (Generated with a bias from the major industry)
+Local Boon: Abundant Wildflowers (generated with a bias from major industry)
+Local Problem: Loose Arsonist (generated with a bias from major industry)
+
+History:
+(Here are the events that make up the last n years of the town's history as supplied by the user)
+
+People: (list of all people generated during n years of history, sorted by living first and then by occupation)
+Jeff the Beekeep: (name+occupation generated randomly)
+  Meta:
+    Born: 567 of the 5th age
+    Father: Rutger (also in people list)
+    Mother: Brianne (also in people list)
+    Siblings: None
+    Wife: Elena (also in people list)
+  Life Story: (list of personal events)
+    Married Elena (generated)
+    Lost an eye to disease (generated)
+    Lost a home to fire (generated with bias towards local problem of the time)
+  Physical traits:
+    Missing an eye (gained as a result of a personal event)
+    
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ This is a basic look at what an output may look like, obviously with large population lists the people list will need to be searchable.
+ Also there may be other fields to add later, if we intend to generate a map then each person will need a field for residence and place 
+ of work.
+ 
+Basically, there are for major catagories of what we're supplying to the user: Town Meta, Personal Meta, Town Events, Personal Events.
+town events are what produce the town meta, while personal events will produce personal meta. Also all people will have personal events
+that correspond to each town event.
