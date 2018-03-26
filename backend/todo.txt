@@ -1,1 +1,0 @@
-This folder is for Ben and Bert to work on our generation/sorting algorithms.
