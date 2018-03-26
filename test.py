@@ -3,7 +3,7 @@
 # Purpose: Provide a temporary wrapper for townwizard and also test
 #          View/MultiView function
 
-import sys
+import os, sys
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import *
 import json
@@ -31,8 +31,12 @@ class Test(MultiView):
         self.show()
 
     def initUI(self):
+        # window setup
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
+
+        scriptDir = os.path.dirname(os.path.realpath(__file__))
+        self.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'img' + os.path.sep + 'swords.png'))
 
         # case widget
         self.case = QWidget()
