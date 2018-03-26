@@ -35,8 +35,9 @@ class Test(MultiView):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
-        scriptDir = os.path.dirname(os.path.realpath(__file__))
-        self.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'img' + os.path.sep + 'swords.png'))
+        if sys.platform != 'darwin':
+            scriptDir = os.path.dirname(os.path.realpath(__file__))
+            self.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'img' + os.path.sep + 'swords.png'))
 
         # case widget
         self.case = QWidget()
