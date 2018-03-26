@@ -61,10 +61,6 @@ class TownWizard(View):
         self.layouts['towninfo'] = QGridLayout()
         self.layouts['stage'] = QVBoxLayout()
 
-        # switchy boi
-        self.layouts['case'] = QVBoxLayout()
-        self.switcher = QStackedWidget()
-        #self.layouts['case'].addWiget(self.switcher) # STOPPED HERE
         # set view layout
         self.setViewLayout(self.layouts['main'])
 
