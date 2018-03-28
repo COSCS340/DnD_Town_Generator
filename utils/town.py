@@ -15,10 +15,12 @@ class Town:
         self.active = False
 
     def new(self):
+        self.data['name'] = ''
         self.data['occupations'] = {}
         self.data['events'] = {}
 
     def load(self, fn):
+        self.data['name'] = ''
         self.data['occupations'] = {}
         self.data['events'] = {}
         self.active = True
