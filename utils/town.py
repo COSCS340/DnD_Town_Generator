@@ -15,10 +15,12 @@ class Town:
         self.active = False
 
     def new(self):
-        self.data['people'] = {}
+        self.data['occupations'] = {}
         self.data['events'] = {}
 
     def load(self, fn):
+        self.data['occupations'] = {}
+        self.data['events'] = {}
         self.active = True
         with open(fn, 'r') as fp:
             self.data = json.load(fp)
@@ -62,14 +64,15 @@ class Town:
             return self.mods[pathkey]['path']
         else: return ''
 
-    def build(self, tn, fn):
+    def build(self, fn, tn, pop):
         if self.active:
             # make changes
             self.data['name'] = tn
+            self.data['population'] = int(pop)
 
             for i in self.mods:
-                if 'people' in self.mods[i]['data']:
-                    self.data['people'].update(self.mods[i]['data']['people'])
+                if 'occupations' in self.mods[i]['data']:
+                    self.data['occupations'].update(self.mods[i]['data']['occupations'])
                 if 'events' in self.mods[i]['data']:
                     self.data['events'].update(self.mods[i]['data']['events'])
 
@@ -78,7 +81,7 @@ class Town:
                 json.dump(self.data, fp)
 
             # reset
-            self.active = False
+            #self.active = False
 
             # return success
             return True
@@ -89,3 +92,18 @@ class Town:
     # data grabbing
     def get_people(self):
         return self.data['people'].keys()
+
+    # HWAPATEWEE
+    def spit(self):
+        if not self.active: return
+        print('Name: ' + self.data['name'])
+        print('Population: ' + str(self.data['population']))
+        print('Occupations:')
+        for i in self.data['occupations']:
+            print('  ' + i)
+        print('Events:')
+        for i in self.data['events']:
+            print('  ' + i + ': ' + self.data['events'][i]['description'])
+            print('  Outcomes:')
+            for j in self.data['events'][i]['outcomes']:
+                print('    ' + j + ': ' + self.data['events'][i]['outcomes'][j]['description'])

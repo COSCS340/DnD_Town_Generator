@@ -52,9 +52,11 @@ class TownWizard(View):
         self.widgets['info']['object'] = QGroupBox('Stats')
         self.widgets['info']['townlabel'] = QLabel(self)
         self.widgets['info']['towntext'] = QLineEdit(self)
-        self.widgets['info']['peoplelabel'] = QLabel(self)
+        self.widgets['info']['poplabel'] = QLabel('Population')
+        self.widgets['info']['poptext'] = QLineEdit(self)
         self.widgets['info']['eventlabel'] = QLabel(self)
         self.widgets['info']['build'] = QPushButton('Build Town')
+        self.widgets['info']['spit'] = QPushButton('Dump Stats')
 
         # layouts
         self.layouts['main'] = QGridLayout()
@@ -75,7 +77,6 @@ class TownWizard(View):
 
         # town name label widget setup
         self.widgets['info']['townlabel'].setText("Town Name")
-        self.widgets['info']['peoplelabel'].setText("Number of residents")
         self.widgets['info']['eventlabel'].setText("Number of Events")
 
         # staging area widget setup
@@ -96,6 +97,8 @@ class TownWizard(View):
         # signals
         self.widgets['add'].clicked.connect(self.addsig)
         self.widgets['info']['build'].clicked.connect(self.buildsig)
+        self.widgets['info']['spit'].clicked.connect(self.spitsig)
+
 
         # add to grid layout
         self.layouts['main'].addWidget(self.widgets['tree'],0,0,1,3)
@@ -107,9 +110,11 @@ class TownWizard(View):
 
         self.layouts['towninfo'].addWidget(self.widgets['info']['townlabel'],0,0)
         self.layouts['towninfo'].addWidget(self.widgets['info']['towntext'],0,1)
-        self.layouts['towninfo'].addWidget(self.widgets['info']['peoplelabel'],1,0)
+        self.layouts['towninfo'].addWidget(self.widgets['info']['poplabel'],1,0)
+        self.layouts['towninfo'].addWidget(self.widgets['info']['poptext'],1,1)
         self.layouts['towninfo'].addWidget(self.widgets['info']['eventlabel'],2,0)
-        self.layouts['towninfo'].addWidget(self.widgets['info']['build'],4,0,1,2)
+        self.layouts['towninfo'].addWidget(self.widgets['info']['spit'],4,0,1,2)
+        self.layouts['towninfo'].addWidget(self.widgets['info']['build'],5,0,1,2)
 
         self.layouts['stage'].addWidget(self.widgets['stage'])
 
@@ -119,6 +124,9 @@ class TownWizard(View):
         self.layouts['towninfo'].setRowStretch(3,4)
 
     ### signals ###
+
+    def spitsig(self):
+        self.town.spit()
 
     def addsig(self):
         # get file name from tree
@@ -172,20 +180,21 @@ class TownWizard(View):
     def buildsig(self):
         # get town name
         townname = self.widgets['info']['towntext'].text()
+        townpop = self.widgets['info']['poptext'].text()
 
         # check if town loaded and name given
         if not self.town.active:
-            print("placeholder to make python happy")
             self.setStatus('Nothing to save')
         elif townname == '':
-            print("placeholder")
             self.setStatus('Need a town name to save')
+        elif townpop == '':
+            self.setStatus('Need a population.  No ghost towns allowed')
         else:
             # save it
             filename, _ = QFileDialog.getSaveFileName(self, 'Save File', './towns')
             if filename != '':
                 if filename[-5:] != '.json': filename = filename + '.json'
-                success = self.town.build(townname, filename)
+                success = self.town.build(filename, townname, townpop)
                 if success: self.setStatus('Saved to ' + filename)
                 else: self.setStatus('Something happened.')
 
@@ -246,6 +255,7 @@ class TownWizard(View):
             self.town.load(name)
             self.setStatus("Town loaded")
             self.widgets['info']['towntext'].setText(self.town.data['name'])
+            self.widgets['info']['poptext'].setText(str(self.town.data['population']))
         else: self.setStatus("No town loaded")
 
     def recursive_add(self, path):
