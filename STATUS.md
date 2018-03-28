@@ -23,6 +23,20 @@ Our project has gone through some slight changes throughout its lifetime. The pr
 The second major change our project went through was the abandonment of our "Main Menu" format. The reason for this change primarily sprouted from the addition of the Town Wizard. Once this feature was implemented, it made sense for our project to adopt a format that supported easy switching among tabs. Our group, especially Dakota Sanders and Matt Matto, who had developed the GUI for the main menu, decided to adopt the temporary format Ben Johnson had created when making the Wizard. This format involves adding buttons to the top of all windows within the application, allowing our users to easily switch from one content tab to another. Although this format was originally added to be a temporary format for the Wizard, our team as a whole found the new format to be nicer and easier to use, thus we abandoned our previous format and adopted the new one in early March.
 
 ## Technology
+#### Architecture
+The architecture of our project consists of two levels: a staging area for building towns out of individual component and a holding area for loading and manipulating towns after being built.  Individual components are JSON files that must follow a few specific rules, which are mainly naming schemes to unify the different components at build-time.  The staging area takes these multiple JSON files and builds them into a monolithic file, called a town, which can be easily shared between users.  The building process is relatively simple, provided the naming schemes are followed.  The holding area loads a town file into a class in order to easily share information between the current and future modules.  This class also handles town building.
+
+#### Goals
+Our goals were to create a function GUI and backend that handles the loading and building of town files.
+
+### What works?
+We are able to successfully load and complile a town file.  Additonally, we are able to print our town's information to the console and even some information into our GUI.
+
+#### Testing
+During development, we have extensively hand-tested each component across multiple computers and operating systems.  However, we have not implemented any official testing frameworks for this project.
+
+### Future goals
+We plan to implement randomized individuals per town to add individuality to each town.  Additionally, we intend to expand on the GUI in terms of usability, information, and features.  The team that previously worked on the GUI have shifted their focus to the generation of maps as a visual aid for each town.  The team working on the backend will continue developing an API for the GUI and map generation as well as expand upon the interface and a standard library of component files.
 
 ## Team
 Our team contains four people, and up until the demo accompanying this status report, we have operated as two seperate subteams: one for the GUI, and one for the backend.
