@@ -24,10 +24,10 @@ The second major change our project went through was the abandonment of our "Mai
 
 ## Technology
 #### Architecture
-The architecture of our project consists of two levels: a staging area for building towns out of individual component and a holding area for loading and manipulating towns after being built.  Individual components are JSON files that must follow a few specific rules, which are mainly naming schemes to unify the different components at build-time.  The staging area takes these multiple JSON files and builds them into a monolithic file, called a town, which can be easily shared between users.  The building process is relatively simple, provided the naming schemes are followed.  The holding area loads a town file into a class in order to easily share information between the current and future modules.  This class also handles town building.
+The architecture of our project consists of two levels: a staging area for building towns out of individual components and a holding area for loading and manipulating towns after being built.  Individual components are JSON files that must follow a few specific rules, which are mainly naming schemes to unify the different components at build-time.  The staging area takes these multiple JSON files and builds them into a monolithic file, called a town, which can be easily shared between users.  The building process is relatively simple, provided the naming schemes are followed.  The holding area loads a town file into a class in order to easily share information between the current and future modules.  This class also handles town building.
 
 #### Goals
-Our goals were to create a function GUI and backend that handles the loading and building of town files.
+Our goals were to create a functional and clear GUI and backend that handles the loading and building of town files.
 
 ### What works?
 We are able to successfully load and complile a town file.  Additonally, we are able to print our town's information to the console and even some information into our GUI.
