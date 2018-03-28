@@ -2,11 +2,11 @@
 ## Team
 **Title:** DnD Town Generator</br>
 **Team Name:** DnD Town Generator</br>
-**Team Members:**</br>
-<pre>Dakota Sanders</br>
+### Team Members:</br>
+Dakota Sanders</br>
 Bert Bashford</br>
 Matt Matto</br>
-Ben Johnson</br> </pre>
+Ben Johnson</br>
 
 ## Introduction
 Our application was designed from the beginning to be a town generator for the tabletop game Dungeons and Dragons. The primary usage of our application is to aid a dungeon master (DM) in creating an in-game town, full of characters and unique story events.
@@ -32,5 +32,15 @@ Our GUI team consisted of Dakota Sanders and Matt Matto. The primary goal of thi
 The other subteam was responsible for creating a backend to generate and provide town information for the GUI to present. This team consists of Ben Johnson and Bert Bashford. This team's roles evolved with the addition of the Town Wizard, and eventually the sandbox environment created by this team was adopted over the GUI created by the GUI team. Thus far this team has implemented the Wizard and functionality to display town members. This team going forward plans to clean up the data storage into a more-usable template, as well as create an interface for the GUI code to easily pull information from the local storage. This interface will also provide relevant information to our map generation code.
 
 ## Project Management
+The project can currently display the information, which is technically our primary goal. The GUI development was set back significantly by our adoption of the new layout, but adding functionality to display the information in a visually pleasing way will only take a short amount of time to add. As far as our primary goal goes, we are on track.
+
+Regarding the map generation, we are in a good spot to begin development without negatively impacting the other goals of our project. Because of this fact, we are slightly ahead of schedule.
 
 ## Reflection
+The primary "hiccup" throughout this project has been the decision to adopt a new GUI style midway through development. While this went well as far as the transition goes, it effectively nullified a significant amount of work that was already completed. As such, we probably could have tested design ideas more at the beginning to avoid this hiccup.
+
+What this change actually did help us understand was the structure of how we arranged our content windows. One of the benefits of switching our GUI layout was the adoption of an easier structure to change content on the screen. This new way means we don't have to spend as much time keeping track of what panels are passed to what functions.
+
+The development of the Wizard application aspect has gone tremendously well. Our decision to use PyQt5 ended up being very beneficial because of how simple it was to utilize Python structures in our program. This meant that quickly adding functionality like the Wizard became significantly easier to do. The logic behind the code that runs the wizard is very simple to understand and add to.
+
+In the next iteration, we will plan design choices better to avoid rewriting code. We will also focus on planning out aspects of functionality ahead of time so that all of our members are aware of the implementations we decide.
