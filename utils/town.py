@@ -14,15 +14,18 @@ class Town:
         self.stats = {}
         self.active = False
 
+        # set blanks
+        self.data['name'] = ''
+        self.data['population'] = ''
+        self.data['occupations'] = {}
+        self.data['events'] = {}
+
     def new(self):
         self.data['name'] = ''
         self.data['occupations'] = {}
         self.data['events'] = {}
 
     def load(self, fn):
-        self.data['name'] = ''
-        self.data['occupations'] = {}
-        self.data['events'] = {}
         self.active = True
         with open(fn, 'r') as fp:
             self.data = json.load(fp)
