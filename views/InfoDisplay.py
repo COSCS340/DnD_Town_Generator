@@ -9,5 +9,12 @@ class display(View):
 
         self.loadMenu('config/display-menu.json')
 
+        self.layout = QVBoxLayout()
+        self.setViewLayout(self.layout)
+
+        loadButton = QPushButton("Load Town")
+        loadButton.clicked.connect(self.sig)
+        self.layout.addWidget(loadButton)
+
     def sig(self):
         print("Heyo")
