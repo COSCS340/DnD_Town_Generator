@@ -160,6 +160,7 @@ class TownWizard(View):
 
         # reset stuff
         self.widgets['info']['towntext'].setText('')
+        self.widgets['info']['poptext'].setText('')
         self.mvp.menu['&Edit']['&Undo'].setDisabled(True)
         self.mvp.menu['&Edit']['&Redo'].setDisabled(True)
 
