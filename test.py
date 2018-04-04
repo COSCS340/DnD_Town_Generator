@@ -11,6 +11,7 @@ import json
 from utils.multiview import MultiView
 from views.townwizard import TownWizard
 from views.sampleview import view1
+from views.InfoDisplay import display
 
 class Test(MultiView):
     def __init__(self):
@@ -48,18 +49,23 @@ class Test(MultiView):
 
         self.home = view1(self)
         self.wiz = TownWizard(self)
+        self.display = display(self)
 
         self.addView(self.home)
         self.addView(self.wiz)
+        self.addView(self.display)
 
         # real widgets
         butt = QPushButton('Home')
         butt.clicked.connect(self.homesig)
         butt2 = QPushButton('Wizard')
         butt2.clicked.connect(self.wizardsig)
+        butt3 = QPushButton('Display Town')
+        butt3.clicked.connect(self.displaysig)
 
         self.layout.addWidget(butt, 0,0)
         self.layout.addWidget(butt2, 0,1)
+        self.layout.addWidget(butt3, 0, 2)
         self.layout.addWidget(self.getViewer(), 1,0,1,3)
         self.layout.setColumnStretch(2,4)
 
@@ -74,6 +80,9 @@ class Test(MultiView):
         if self.getCurrentView() != self.wiz.getWidget():
             self.setCurrentView(self.wiz)
 
+    def displaysig(self):
+        if self.getCurrentView() != self.display.getWidget():
+            self.setCurrentView(self.display)
 
 
 if __name__ == '__main__':
