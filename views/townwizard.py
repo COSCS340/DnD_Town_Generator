@@ -14,15 +14,9 @@ from utils.multiview import View
 
 
 class TownWizard(View):
-    def __init__(self, mvp):
-        # variables
-        super().__init__(mvp)
-        self.loadMenu('config/wiz-menu.json')
+    def setup_view(self):
+        self.load_menu('config/wiz-menu.json')
 
-        # init
-        self.initUI()
-
-    def initUI(self):
         # variables
         self.models = {}
         self.widgets = {}
@@ -64,7 +58,7 @@ class TownWizard(View):
         self.layouts['stage'] = QVBoxLayout()
 
         # set view layout
-        self.setViewLayout(self.layouts['main'])
+        self.set_layout(self.layouts['main'])
 
         # sub-layouts
         self.widgets['stagebox'].setLayout(self.layouts['stage'])
@@ -146,7 +140,7 @@ class TownWizard(View):
         success = self.town.remove(pathkey)
 
         if success:
-            self.setStatus('Removed: ' + path)
+            self.set_status('Removed: ' + path)
             self.log_change('remove', pathkey, path)
 
     def newsig(self):
@@ -161,12 +155,12 @@ class TownWizard(View):
         # reset stuff
         self.widgets['info']['towntext'].setText('')
         self.widgets['info']['poptext'].setText('')
-        self.mvp.menu['&Edit']['&Undo'].setDisabled(True)
-        self.mvp.menu['&Edit']['&Redo'].setDisabled(True)
+        self.parent.menu['&Edit']['&Undo'].setDisabled(True)
+        self.parent.menu['&Edit']['&Redo'].setDisabled(True)
 
         # new stuff and update
         self.town.new()
-        self.setStatus('New town loaded')
+        self.set_status('New town loaded')
         self.update_staging()
 
     def loadsig(self):
@@ -185,19 +179,19 @@ class TownWizard(View):
 
         # check if town loaded and name given
         if not self.town.active:
-            self.setStatus('Nothing to save')
+            self.set_status('Nothing to save')
         elif townname == '':
-            self.setStatus('Need a town name to save')
+            self.set_status('Need a town name to save')
         elif townpop == '':
-            self.setStatus('Need a population.  No ghost towns allowed')
+            self.set_status('Need a population.  No ghost towns allowed')
         else:
             # save it
             filename, _ = QFileDialog.getSaveFileName(self, 'Save File', './towns')
             if filename != '':
                 if filename[-5:] != '.json': filename = filename + '.json'
                 success = self.town.build(filename, townname, townpop)
-                if success: self.setStatus('Saved to ' + filename)
-                else: self.setStatus('Something happened.')
+                if success: self.set_status('Saved to ' + filename)
+                else: self.set_status('Something happened.')
 
     def undosig(self):
         # get change
@@ -212,13 +206,13 @@ class TownWizard(View):
             self.town.add(change['path'])
 
         # notify user
-        self.setStatus("Undo: add " + change['path'])
+        self.set_status("Undo: add " + change['path'])
 
         # disability claims
-        self.getMenu()['&Edit']['&Redo']['disabled'] = "False"
+        self.get_menu()['&Edit']['&Redo']['disabled'] = "False"
         if self.changes.canUndo() == False:
-            self.getMenu()['&Edit']['&Undo']['disabled'] = "True"
-        self.updateMenu()
+            self.get_menu()['&Edit']['&Undo']['disabled'] = "True"
+        self.update_menu()
 
         # update staging view
         self.update_staging()
@@ -237,9 +231,9 @@ class TownWizard(View):
             self.town.remove(change['pathkey'])
 
         # disability claims
-        self.getMenu()['&Edit']['&Undo']['disabled'] = "False"
+        self.get_menu()['&Edit']['&Undo']['disabled'] = "False"
         if not self.changes.canRedo():
-            self.mvp.menu['&Edit']['&Redo'].setDisabled(True)
+            self.parent.menu['&Edit']['&Redo'].setDisabled(True)
 
         # update staging view
         self.update_staging()
@@ -254,10 +248,10 @@ class TownWizard(View):
         name, _ = QFileDialog.getOpenFileName(self, 'Open File', './towns')
         if name:
             self.town.load(name)
-            self.setStatus("Town loaded")
+            self.set_status("Town loaded")
             self.widgets['info']['towntext'].setText(self.town.data['name'])
             self.widgets['info']['poptext'].setText(str(self.town.data['population']))
-        else: self.setStatus("No town loaded")
+        else: self.set_status("No town loaded")
 
     def recursive_add(self, path):
         # recursion
@@ -270,18 +264,18 @@ class TownWizard(View):
 
             self.log_change('add', pathkey, path)
 
-            if pathkey != '': self.setStatus('Added: ' + path)
-            else: self.setStatus('Error: ' + fullname + ' is not valid')
+            if pathkey != '': self.set_status('Added: ' + path)
+            else: self.set_status('Error: ' + fullname + ' is not valid')
 
     def log_change(self, action, pathkey, path):
         # log it
         self.changes.log({'action': action, 'path': path, 'pathkey': pathkey})
 
         # update gui
-        self.getMenu()['&Edit']['&Undo']['disabled'] = "False"
+        self.get_menu()['&Edit']['&Undo']['disabled'] = "False"
         if not self.changes.canRedo():
-            self.getMenu()['&Edit']['&Redo']['disabled'] = "True"
-        self.updateMenu()
+            self.get_menu()['&Edit']['&Redo']['disabled'] = "True"
+        self.update_menu()
         #self.menu['edit_undo'].setDisabled(False)
         #if self.changes.canRedo() == False: self.menu['edit_redo'].setDisabled(True)
         self.update_staging()

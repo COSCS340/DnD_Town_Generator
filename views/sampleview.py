@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import *
 
 from utils.multiview import View
 
-class view1(View):
+class SampleView(View):
     def __init__(self, parent):
         super().__init__(parent)
         self.loadMenu('config/view1-menu.json')
