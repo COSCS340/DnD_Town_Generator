@@ -23,16 +23,7 @@ class Main(QMainWindow):
         # fancy stack widget
         self.mv = MultiView(self.mb, self.sb)
         self.mv.add_view('wizard', TownWizard(self.mv))
-        # self.mv.add_view('sample', SampleView(self.mv))
         self.mv.set_view('wizard')
-
-        '''
-        MultiView is a fancy stack widget
-        Views are fancy widgets
-
-        Multiviews hold views and set them visible or not
-        Also, they handle manipulation of the status bar and menu bar
-        '''
 
         # create other widgets
         self.widgets = {}
