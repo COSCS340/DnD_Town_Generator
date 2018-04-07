@@ -95,7 +95,7 @@ class View(QWidget):
 
     def update_menu(self):
         if self.ViewMainMenu is not None:
-            self.parent.set_menu(self.get_menu)
+            self.parent.set_menu(self.get_menu())
 
     def set_status(self, string):
         self.parent.statusbar.showMessage(string)
