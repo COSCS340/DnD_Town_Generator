@@ -1,0 +1,15 @@
+{
+    "type": "Person",
+    "title": "Fisherman",
+    "events": {
+        "1": [
+            "He swears that he saw a Kracken that day."
+        ],
+        "2": [
+            "Lost his boat to hostile aquatic life"
+        ],
+        "3": [
+            "Actually caught a Kracken.  {name} is now famous."
+        ]
+    }
+}

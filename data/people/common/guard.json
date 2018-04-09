@@ -1,0 +1,15 @@
+{
+    "type": "Person",
+    "title": "Guard",
+    "events": {
+        "1": [
+            "Got a promotion."
+        ],
+        "2": [
+            "Lost a hand in a fight with a theif."
+        ],
+        "3": [
+            "Died fighting against cultists."
+        ]
+    }
+}

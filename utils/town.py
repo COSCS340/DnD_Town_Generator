@@ -5,7 +5,17 @@
 # TODO: Add error checking
 # TODO:
 
-import os, glob, json
+
+import os
+import glob
+import json
+
+
+class Materials:
+    def __init__(self):
+        self.people = {}
+        self.events = {}
+
 
 class Town:
     def __init__(self):
@@ -13,6 +23,9 @@ class Town:
         self.mods = {}
         self.stats = {}
         self.active = False
+
+        # start new Materials class
+        self.materials = Materials()
 
         # set blanks
         self.data['name'] = ''
@@ -50,6 +63,14 @@ class Town:
         # TODO: error check this
         f = json.load(open(path))
 
+        # check type
+        if f['type'] == 'Person':
+            # do person things
+            self.materials.people[f['title']] = f['events']
+        elif f['type'] == 'Event':
+            # do event things
+            self.materials.events[f['title']] = f['events']
+
         # add
         self.mods[part] = {}
         self.mods[part]['path'] = path
@@ -67,7 +88,8 @@ class Town:
     def getPath(self, pathkey):
         if pathkey in self.mods:
             return self.mods[pathkey]['path']
-        else: return ''
+        else:
+            return ''
 
     def build(self, fn, tn, pop):
         if self.active:
@@ -77,7 +99,8 @@ class Town:
 
             for i in self.mods:
                 if 'occupations' in self.mods[i]['data']:
-                    self.data['occupations'].update(self.mods[i]['data']['occupations'])
+                    self.data['occupations'].\
+                        update(self.mods[i]['data']['occupations'])
                 if 'events' in self.mods[i]['data']:
                     self.data['events'].update(self.mods[i]['data']['events'])
 
@@ -86,13 +109,14 @@ class Town:
                 json.dump(self.data, fp)
 
             # reset
-            #self.active = False
+            # self.active = False
 
             # return success
             return True
-        else: return False
+        else:
+            return False
 
-    ## get functions
+    # get functions #
 
     # data grabbing
     def get_people(self):
@@ -100,7 +124,8 @@ class Town:
 
     # HWAPATEWEE
     def spit(self):
-        if not self.active: return
+        if not self.active:
+            return
         print('Name: ' + self.data['name'])
         print('Population: ' + str(self.data['population']))
         print('Occupations:')
@@ -111,4 +136,5 @@ class Town:
             print('  ' + i + ': ' + self.data['events'][i]['description'])
             print('  Outcomes:')
             for j in self.data['events'][i]['outcomes']:
-                print('    ' + j + ': ' + self.data['events'][i]['outcomes'][j]['description'])
+                desc = self.data['events'][i]['outcomes'][j]['description']
+                print(f'    {j}: {desc}')

@@ -1,0 +1,15 @@
+{
+    "type": "Person",
+    "title": "Hunter",
+    "events": {
+        "1": [
+            "Gained a scar from a run-in with a bear."
+        ],
+        "2": [
+            "Badly injured by a wild boar."
+        ],
+        "3": [
+            "Contracted licanthropy while in the forest."
+        ]
+    }
+}
