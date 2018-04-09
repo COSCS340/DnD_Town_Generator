@@ -55,7 +55,7 @@ class Town:
         # get current directory for string manipulation
         # TODO: error check for .json
         curr = os.path.dirname(os.path.abspath(__file__))
-
+        print(curr)
         # get partial but still unique path
         part = path[len(curr)+6:]
 
@@ -67,22 +67,14 @@ class Town:
 
         # check type
         if f['type'] == 'Person':
-            print('PERSON: adding')
-            # do person things
             self.materials.people[f['title']] = f
         elif f['type'] == 'Event':
-            print('EVENT: adding')
-            # do event things
             self.materials.events[f['title']] = f
-
-        '''
-        # add
-        self.mods[part] = {}
-        self.mods[part]['path'] = path
-        self.mods[part]['data'] = f
-        '''
+        else:
+            return ''
 
         # TODO: actually error check
+        print(part)
         return part
 
     def remove(self, path):
