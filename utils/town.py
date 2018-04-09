@@ -63,18 +63,24 @@ class Town:
         # TODO: error check this
         f = json.load(open(path))
 
+        # TODO: integrity check the file
+
         # check type
         if f['type'] == 'Person':
+            print('PERSON: adding')
             # do person things
-            self.materials.people[f['title']] = f['events']
+            self.materials.people[f['title']] = f
         elif f['type'] == 'Event':
+            print('EVENT: adding')
             # do event things
-            self.materials.events[f['title']] = f['events']
+            self.materials.events[f['title']] = f
 
+        '''
         # add
         self.mods[part] = {}
         self.mods[part]['path'] = path
         self.mods[part]['data'] = f
+        '''
 
         # TODO: actually error check
         return part
