@@ -20,8 +20,6 @@ class TownSeed:
 class Town:
     def __init__(self):
         self.data = {}
-        self.mods = {}
-        self.stats = {}
         self.active = False
 
         # start new TownSeed class
@@ -33,18 +31,15 @@ class Town:
         self.data['occupations'] = {}
         self.data['events'] = {}
 
-    def new(self):
-        self.data['name'] = ''
-        self.data['occupations'] = {}
-        self.data['events'] = {}
-
-    def load(self, fn):
-        self.active = True
-        with open(fn, 'r') as fp:
-            self.data = json.load(fp)
+    # ## seed ## #
 
     def load_seed(self, fn):
+        # setup and reset
         self.active = True
+        self.seed.people.clear()
+        self.seed.events.clear()
+
+        # open file
         with open(fn, 'r') as f:
             data = json.load(f)
 
@@ -59,11 +54,6 @@ class Town:
         # load events
         for i in data['events']:
             self.seed.events[i] = data['events'][i]
-
-    def clear(self):
-        self.data.clear()
-        self.mods.clear()
-        self.active = False
 
     def add_seed(self, path):
         # indicate changes have been made
@@ -94,18 +84,6 @@ class Town:
         print(part)
         return part
 
-    def remove(self, path):
-        change = self.mods.pop(path)
-
-        # TODO: actually error check
-        return True
-
-    def getPath(self, pathkey):
-        if pathkey in self.mods:
-            return self.mods[pathkey]['path']
-        else:
-            return ''
-
     def build_seed(self, fn):
         wdata = {}
 
@@ -122,6 +100,35 @@ class Town:
 
         with open(fn, 'w') as f:
             json.dump(wdata, f)
+
+    # ## town ## #
+
+    def new(self):
+        self.data['name'] = ''
+        self.data['occupations'] = {}
+        self.data['events'] = {}
+
+    def load(self, fn):
+        self.active = True
+        with open(fn, 'r') as fp:
+            self.data = json.load(fp)
+
+    def clear(self):
+        self.data.clear()
+        self.mods.clear()
+        self.active = False
+
+    def remove(self, path):
+        change = self.mods.pop(path)
+
+        # TODO: actually error check
+        return True
+
+    def getPath(self, pathkey):
+        if pathkey in self.mods:
+            return self.mods[pathkey]['path']
+        else:
+            return ''
 
     def build(self, fn, tn, pop):
         if self.active:
