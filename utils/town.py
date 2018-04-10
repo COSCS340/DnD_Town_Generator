@@ -46,7 +46,7 @@ class Town:
     def load_seed(self, fn):
         self.active = True
         with open(fn, 'r') as f:
-            data = json.load(fp)
+            data = json.load(f)
 
         # integrity check
         if data['type'] != 'Seed':
@@ -65,7 +65,7 @@ class Town:
         self.mods.clear()
         self.active = False
 
-    def add(self, path):
+    def add_seed(self, path):
         # indicate changes have been made
         self.active = True
 

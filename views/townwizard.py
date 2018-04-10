@@ -20,19 +20,13 @@ class TownWizard(View):
         self.load_menu('config/wiz-menu.json')
 
         # variables
-        self.models = {}
         self.widgets = {}
         self.layouts = {}
-        self.menu = {}
-        self.undo = []
-        self.redo = []
         self.town = Town()
         self.changes = Changes()
         self.stagelist = []
 
-        self.town.new()
-
-        # add elements and setup layout
+        # build interface
         self.setup_widgets()
         self.setup_layouts()
         self.build()
@@ -48,7 +42,9 @@ class TownWizard(View):
         self.widgets['gen-seed'] = QPushButton('Generate Seed')
 
         # build area
-        self.widgets['load-seed'] = QPushButton('Load Seed')
+        self.widgets['load-seed'] = QPushButton('Load')
+        self.widgets['seed-stats'] = QPushButton('Stats')
+        self.widgets['load-text'] = QLineEdit()
 
         # tree stuff
         self.treemodel = QFileSystemModel()
@@ -62,9 +58,15 @@ class TownWizard(View):
         self.widgets['tree'].hideColumn(2)
         self.widgets['tree'].hideColumn(3)
 
+        # options
+        self.widgets['tree'].setFixedWidth(200)
+        self.widgets['stage'].setFixedWidth(200)
+        self.widgets['seed-stats'].setDisabled(True)
+
         # signals
-        self.widgets['gen-seed'].clicked.connect(self.genseedsig)
-        self.widgets['tree'].doubleClicked.connect(self.addsig)
+        self.widgets['gen-seed'].clicked.connect(self.seedgensig)
+        self.widgets['tree'].doubleClicked.connect(self.seedaddsig)
+        self.widgets['load-seed'].clicked.connect(self.seedloadsig)
 
     def setup_layouts(self):
         # initialize layouts
@@ -78,22 +80,61 @@ class TownWizard(View):
         self.set_layout(self.layouts['main'])
 
     def build(self):
+        # seed area
         self.layouts['seed'].addWidget(self.widgets['tree'], 0, 0, 3, 1)
         self.layouts['seed'].addWidget(QLabel('Staging area'), 0, 1)
         self.layouts['seed'].addWidget(self.widgets['stage'], 1, 1)
         self.layouts['seed'].addWidget(self.widgets['gen-seed'], 2, 1)
 
-        self.layouts['build'].addWidget(self.widgets['load-seed'], 0, 0)
+        # build area
+        self.layouts['build'].addWidget(QLabel('Seed'), 0, 0)
+        self.layouts['build'].addWidget(self.widgets['load-text'], 1, 0, 1, 2)
+        self.layouts['build'].addWidget(self.widgets['load-seed'], 2, 0)
+        self.layouts['build'].addWidget(self.widgets['seed-stats'], 2, 1)
 
+        self.layouts['build'].setRowStretch(4, 4)
+
+        # main widget
         self.layouts['main'].addWidget(self.widgets['seed-box'], 0, 0)
         self.layouts['main'].addWidget(self.widgets['build-box'], 0, 1)
 
-    # signals
-    def genseedsig(self):
+    # ## seed signals ## #
+
+    def seedgensig(self):
+        # error checking
+        if len(self.stagelist) == 0:
+            self.set_status('Nothing to make a seed out of')
+            return
+
         # get filename
-        # call self.town.build_seed(fn)
-        fn = './TEST.json'
+        fn, _ = QFileDialog.getSaveFileName(self, 'Save File', './seeds')
+        if fn != '':
+            if fn[-5:] != '.json':
+                fn = fn + '.json'
+
+        # build seed
         self.town.build_seed(fn)
+
+        # load the seed for town building
+        self.town.load_seed(fn)
+        self.widgets['load-text'].setText(fn)
+
+    def seedloadsig(self):
+        print('load seed')
+        name, _ = QFileDialog.getOpenFileName(self, 'Open File', './seeds')
+
+        self.town.load_seed(name)
+        self.widgets['load-text'].setText(name)
+
+    def seedaddsig(self):
+        # get file name from tree
+        index = self.widgets['tree'].currentIndex()
+        path = self.treemodel.filePath(index)
+
+        # adds the file(s) to the town to be written at the build stage
+        self.recursive_add(path)
+
+    # ## build signals ## #
 
     '''
     def setupInterface(self):
@@ -145,10 +186,10 @@ class TownWizard(View):
         self.widgets['tree'].hideColumn(1)
         self.widgets['tree'].hideColumn(2)
         self.widgets['tree'].hideColumn(3)
-        self.widgets['tree'].doubleClicked.connect(self.addsig)
+        self.widgets['tree'].doubleClicked.connect(self.seedaddsig)
 
         # signals
-        self.widgets['add'].clicked.connect(self.addsig)
+        self.widgets['add'].clicked.connect(self.seedaddsig)
         self.widgets['info-build'].clicked.connect(self.buildsig)
         self.widgets['info-spit'].clicked.connect(self.spitsig)
 
@@ -181,14 +222,6 @@ class TownWizard(View):
 
     def spitsig(self):
         self.town.spit()
-
-    def addsig(self):
-        # get file name from tree
-        index = self.widgets['tree'].currentIndex()
-        path = self.treemodel.filePath(index)
-
-        # adds the file(s) to the town to be written at the build stage
-        self.recursive_add(path)
 
     def delsig(self):
         print('DELETE SIGNAL')
@@ -277,7 +310,7 @@ class TownWizard(View):
         if change['action'] == 'add':
             self.town.remove(change['pathkey'])
         elif change['action'] == 'remove':
-            self.town.add(change['path'])
+            self.town.add_seed(change['path'])
 
         # notify user
         self.set_status("Undo: add " + change['path'])
@@ -301,7 +334,7 @@ class TownWizard(View):
             return
 
         if change['action'] == 'add':
-            self.town.add(change['path'])
+            self.town.add_seed(change['path'])
         elif change['action'] == 'remove':
             self.town.remove(change['pathkey'])
 
@@ -337,7 +370,7 @@ class TownWizard(View):
             for i in contents:
                 self.recursive_add(i)
         else:
-            pathkey = self.town.add(path)
+            pathkey = self.town.add_seed(path)
             print(f'got pathkey: {pathkey}')
 
             if pathkey != '':

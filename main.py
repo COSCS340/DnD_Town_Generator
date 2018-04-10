@@ -40,7 +40,10 @@ class Main(QMainWindow):
         # add to the layout
         self.layout.addWidget(self.widgets['home'], 0, 0)
         self.layout.addWidget(self.widgets['wizard'], 0, 1)
-        self.layout.addWidget(self.mv.get_widget(), 1, 0, 1, 2)
+        self.layout.addWidget(self.mv.get_widget(), 1, 0, 1, 3)
+
+        # options
+        self.layout.setColumnStretch(2, 4)
 
         # set center
         self.setCentralWidget(self.widgets['main'])
