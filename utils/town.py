@@ -11,7 +11,7 @@ import glob
 import json
 
 
-class Materials:
+class TownSeed:
     def __init__(self):
         self.people = {}
         self.events = {}
@@ -24,8 +24,8 @@ class Town:
         self.stats = {}
         self.active = False
 
-        # start new Materials class
-        self.materials = Materials()
+        # start new TownSeed class
+        self.seed = TownSeed()
 
         # set blanks
         self.data['name'] = ''
@@ -42,6 +42,23 @@ class Town:
         self.active = True
         with open(fn, 'r') as fp:
             self.data = json.load(fp)
+
+    def load_seed(self, fn):
+        self.active = True
+        with open(fn, 'r') as f:
+            data = json.load(fp)
+
+        # integrity check
+        if data['type'] != 'Seed':
+            return
+
+        # load people
+        for i in data['people']:
+            self.seed.people[i] = data['people'][i]
+
+        # load events
+        for i in data['events']:
+            self.seed.events[i] = data['events'][i]
 
     def clear(self):
         self.data.clear()
@@ -67,9 +84,9 @@ class Town:
 
         # check type
         if f['type'] == 'Person':
-            self.materials.people[f['title']] = f
+            self.seed.people[f['title']] = f
         elif f['type'] == 'Event':
-            self.materials.events[f['title']] = f
+            self.seed.events[f['title']] = f
         else:
             return ''
 
@@ -89,6 +106,23 @@ class Town:
         else:
             return ''
 
+    def build_seed(self, fn):
+        wdata = {}
+
+        # header
+        wdata['type'] = 'Seed'
+        wdata['people'] = {}
+        wdata['events'] = {}
+
+        # insert data
+        for i in self.seed.people:
+            wdata['people'][i] = self.seed.people[i]
+        for i in self.seed.events:
+            wdata['events'][i] = self.seed.events[i]
+
+        with open(fn, 'w') as f:
+            json.dump(wdata, f)
+
     def build(self, fn, tn, pop):
         if self.active:
             # make changes
@@ -105,9 +139,6 @@ class Town:
             # write the file
             with open(fn, 'w') as fp:
                 json.dump(self.data, fp)
-
-            # reset
-            # self.active = False
 
             # return success
             return True

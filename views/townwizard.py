@@ -33,14 +33,71 @@ class TownWizard(View):
         self.town.new()
 
         # add elements and setup layout
-        self.setupInterface()
+        self.setup_widgets()
+        self.setup_layouts()
+        self.build()
 
-    def setupInterface(self):
-        # widgets
-        self.widgets['stack'] = QStackedWidget(self)
+    def setup_widgets(self):
+        # boxes
+        self.widgets['seed-box'] = QGroupBox('Seed Generation')
+        self.widgets['build-box'] = QGroupBox('Town Generation')
+
+        # seed area
         self.widgets['tree'] = QTreeView()
-        self.widgets['stagebox'] = QGroupBox('Staging Area')
         self.widgets['stage'] = QListWidget()
+        self.widgets['gen-seed'] = QPushButton('Generate Seed')
+
+        # build area
+        self.widgets['load-seed'] = QPushButton('Load Seed')
+
+        # tree stuff
+        self.treemodel = QFileSystemModel()
+        self.treemodel.setRootPath('')
+        self.widgets['tree'].setModel(self.treemodel)
+        self.widgets['tree'].setRootIndex(self.treemodel.index('./data'))
+        self.widgets['tree'].setAnimated(False)
+        self.widgets['tree'].setIndentation(15)
+        self.widgets['tree'].setSortingEnabled(True)
+        self.widgets['tree'].hideColumn(1)
+        self.widgets['tree'].hideColumn(2)
+        self.widgets['tree'].hideColumn(3)
+
+        # signals
+        self.widgets['gen-seed'].clicked.connect(self.genseedsig)
+        self.widgets['tree'].doubleClicked.connect(self.addsig)
+
+    def setup_layouts(self):
+        # initialize layouts
+        self.layouts['seed'] = QGridLayout()
+        self.layouts['build'] = QGridLayout()
+        self.layouts['main'] = QGridLayout()
+
+        # set layouts to widgets
+        self.widgets['seed-box'].setLayout(self.layouts['seed'])
+        self.widgets['build-box'].setLayout(self.layouts['build'])
+        self.set_layout(self.layouts['main'])
+
+    def build(self):
+        self.layouts['seed'].addWidget(self.widgets['tree'], 0, 0, 3, 1)
+        self.layouts['seed'].addWidget(QLabel('Staging area'), 0, 1)
+        self.layouts['seed'].addWidget(self.widgets['stage'], 1, 1)
+        self.layouts['seed'].addWidget(self.widgets['gen-seed'], 2, 1)
+
+        self.layouts['build'].addWidget(self.widgets['load-seed'], 0, 0)
+
+        self.layouts['main'].addWidget(self.widgets['seed-box'], 0, 0)
+        self.layouts['main'].addWidget(self.widgets['build-box'], 0, 1)
+
+    # signals
+    def genseedsig(self):
+        # get filename
+        # call self.town.build_seed(fn)
+        fn = './TEST.json'
+        self.town.build_seed(fn)
+
+    '''
+    def setupInterface(self):
+
         self.widgets['new'] = QPushButton('New')
         self.widgets['edit'] = QPushButton('Edit')
         self.widgets['add'] = QPushButton('Add')
@@ -67,7 +124,7 @@ class TownWizard(View):
         self.widgets['info-object'].setLayout(self.layouts['towninfo'])
 
         # models
-        self.models['tree'] = QFileSystemModel()
+        self.treemodel = QFileSystemModel()
 
         # ## widget setup ## #
 
@@ -79,9 +136,9 @@ class TownWizard(View):
         self.widgets['stage'].doubleClicked.connect(self.delsig)
 
         # file browser widget setup
-        self.models['tree'].setRootPath('')
-        self.widgets['tree'].setModel(self.models['tree'])
-        self.widgets['tree'].setRootIndex(self.models['tree'].index('./data'))
+        self.treemodel.setRootPath('')
+        self.widgets['tree'].setModel(self.treemodel)
+        self.widgets['tree'].setRootIndex(self.treemodel.index('./data'))
         self.widgets['tree'].setAnimated(False)
         self.widgets['tree'].setIndentation(15)
         self.widgets['tree'].setSortingEnabled(True)
@@ -118,6 +175,7 @@ class TownWizard(View):
         self.layouts['main'].setColumnStretch(3, 3)
         self.layouts['main'].setColumnStretch(4, 4)
         self.layouts['towninfo'].setRowStretch(3, 4)
+    '''
 
     # ## signals ## #
 
@@ -127,7 +185,7 @@ class TownWizard(View):
     def addsig(self):
         # get file name from tree
         index = self.widgets['tree'].currentIndex()
-        path = self.models['tree'].filePath(index)
+        path = self.treemodel.filePath(index)
 
         # adds the file(s) to the town to be written at the build stage
         self.recursive_add(path)
@@ -173,7 +231,7 @@ class TownWizard(View):
     def loadsig(self):
         if self.town.active:
             reply = QMessageBox.question(self,
-                                         'Error', "A town is already loaded.\
+                                         'Error', "A town is already loaded. \
                                          Do you want to continue?",
                                          QMessageBox.Yes | QMessageBox.No,
                                          QMessageBox.No)
