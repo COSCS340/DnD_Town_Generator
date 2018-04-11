@@ -45,6 +45,9 @@ class TownWizard(View):
         self.widgets['load-seed'] = QPushButton('Load')
         self.widgets['seed-stats'] = QPushButton('Stats')
         self.widgets['load-text'] = QLineEdit()
+        self.widgets['town-name'] = QLineEdit()
+        self.widgets['town-pop'] = QLineEdit()
+        self.widgets['town-gen'] = QPushButton('Generate Town')
 
         # tree stuff
         self.treemodel = QFileSystemModel()
@@ -62,6 +65,10 @@ class TownWizard(View):
         self.widgets['tree'].setFixedWidth(200)
         self.widgets['stage'].setFixedWidth(200)
         self.widgets['seed-stats'].setDisabled(True)
+
+        self.widgets['load-text'].setPlaceholderText('Seed')
+        self.widgets['town-name'].setPlaceholderText('Town Name')
+        self.widgets['town-pop'].setPlaceholderText('Population')
 
         # signals
         self.widgets['gen-seed'].clicked.connect(self.seedgensig)
@@ -87,10 +94,12 @@ class TownWizard(View):
         self.layouts['seed'].addWidget(self.widgets['gen-seed'], 2, 1)
 
         # build area
-        self.layouts['build'].addWidget(QLabel('Seed'), 0, 0)
-        self.layouts['build'].addWidget(self.widgets['load-text'], 1, 0, 1, 2)
-        self.layouts['build'].addWidget(self.widgets['load-seed'], 2, 0)
-        self.layouts['build'].addWidget(self.widgets['seed-stats'], 2, 1)
+        self.layouts['build'].addWidget(self.widgets['load-text'], 0, 0, 1, 2)
+        self.layouts['build'].addWidget(self.widgets['load-seed'], 1, 0)
+        self.layouts['build'].addWidget(self.widgets['seed-stats'], 1, 1)
+        self.layouts['build'].addWidget(self.widgets['town-name'], 2, 0, 1, 2)
+        self.layouts['build'].addWidget(self.widgets['town-pop'], 3, 0, 1, 2)
+        self.layouts['build'].addWidget(self.widgets['town-gen'], 5, 0, 1, 3)
 
         self.layouts['build'].setRowStretch(4, 4)
 
@@ -113,18 +122,19 @@ class TownWizard(View):
                 fn = fn + '.json'
 
         # build seed
-        self.town.build_seed(fn)
+        self.town.seed_build(fn)
 
         # load the seed for town building
-        self.town.load_seed(fn)
+        self.town.seed_load(fn)
         self.widgets['load-text'].setText(fn)
 
     def seedloadsig(self):
         print('load seed')
         name, _ = QFileDialog.getOpenFileName(self, 'Open File', './seeds')
 
-        self.town.load_seed(name)
+        self.town.seed_load(name)
         self.widgets['load-text'].setText(name)
+        self.set_status(f'Seed {name} loaded')
 
     def seedaddsig(self):
         # get file name from tree
@@ -135,88 +145,6 @@ class TownWizard(View):
         self.recursive_add(path)
 
     # ## build signals ## #
-
-    '''
-    def setupInterface(self):
-
-        self.widgets['new'] = QPushButton('New')
-        self.widgets['edit'] = QPushButton('Edit')
-        self.widgets['add'] = QPushButton('Add')
-        self.widgets['townlabel'] = QLabel(self)
-        self.widgets['info-object'] = QGroupBox('Stats')
-        self.widgets['info-tlabel'] = QLabel(self)
-        self.widgets['info-towntext'] = QLineEdit(self)
-        self.widgets['info-poplabel'] = QLabel('Population')
-        self.widgets['info-poptext'] = QLineEdit(self)
-        self.widgets['info-evlabel'] = QLabel(self)
-        self.widgets['info-build'] = QPushButton('Build Town')
-        self.widgets['info-spit'] = QPushButton('Dump Stats')
-
-        # layouts
-        self.layouts['main'] = QGridLayout()
-        self.layouts['towninfo'] = QGridLayout()
-        self.layouts['stage'] = QVBoxLayout()
-
-        # set view layout
-        self.set_layout(self.layouts['main'])
-
-        # sub-layouts
-        self.widgets['stagebox'].setLayout(self.layouts['stage'])
-        self.widgets['info-object'].setLayout(self.layouts['towninfo'])
-
-        # models
-        self.treemodel = QFileSystemModel()
-
-        # ## widget setup ## #
-
-        # town name label widget setup
-        self.widgets['info-tlabel'].setText("Town Name")
-        self.widgets['info-evlabel'].setText("Number of Events")
-
-        # staging area widget setup
-        self.widgets['stage'].doubleClicked.connect(self.delsig)
-
-        # file browser widget setup
-        self.treemodel.setRootPath('')
-        self.widgets['tree'].setModel(self.treemodel)
-        self.widgets['tree'].setRootIndex(self.treemodel.index('./data'))
-        self.widgets['tree'].setAnimated(False)
-        self.widgets['tree'].setIndentation(15)
-        self.widgets['tree'].setSortingEnabled(True)
-        self.widgets['tree'].hideColumn(1)
-        self.widgets['tree'].hideColumn(2)
-        self.widgets['tree'].hideColumn(3)
-        self.widgets['tree'].doubleClicked.connect(self.seedaddsig)
-
-        # signals
-        self.widgets['add'].clicked.connect(self.seedaddsig)
-        self.widgets['info-build'].clicked.connect(self.buildsig)
-        self.widgets['info-spit'].clicked.connect(self.spitsig)
-
-        # add to grid layout
-        self.layouts['main'].addWidget(self.widgets['tree'], 0, 0, 1, 3)
-        self.layouts['main'].addWidget(self.widgets['new'], 1, 0)
-        self.layouts['main'].addWidget(self.widgets['edit'], 1, 1)
-        self.layouts['main'].addWidget(self.widgets['add'], 1, 2)
-        self.layouts['main'].addWidget(self.widgets['stagebox'], 0, 3, 2, 1)
-        self.layouts['main'].addWidget(self.widgets['info-object'], 0, 4, 2, 1)
-        self.layouts['towninfo'].addWidget(self.widgets['info-tlabel'], 0, 0)
-        self.layouts['towninfo'].addWidget(self.widgets['info-towntext'], 0, 1)
-        self.layouts['towninfo'].addWidget(self.widgets['info-poplabel'], 1, 0)
-        self.layouts['towninfo'].addWidget(self.widgets['info-poptext'], 1, 1)
-        self.layouts['towninfo'].addWidget(self.widgets['info-evlabel'], 2, 0)
-        self.layouts['towninfo'].\
-            addWidget(self.widgets['info-spit'], 4, 0, 1, 2)
-        self.layouts['towninfo'].\
-            addWidget(self.widgets['info-build'], 5, 0, 1, 2)
-
-        self.layouts['stage'].addWidget(self.widgets['stage'])
-
-        # grid layout options
-        self.layouts['main'].setColumnStretch(3, 3)
-        self.layouts['main'].setColumnStretch(4, 4)
-        self.layouts['towninfo'].setRowStretch(3, 4)
-    '''
 
     # ## signals ## #
 
@@ -310,7 +238,7 @@ class TownWizard(View):
         if change['action'] == 'add':
             self.town.remove(change['pathkey'])
         elif change['action'] == 'remove':
-            self.town.add_seed(change['path'])
+            self.town.seed_add(change['path'])
 
         # notify user
         self.set_status("Undo: add " + change['path'])
@@ -334,7 +262,7 @@ class TownWizard(View):
             return
 
         if change['action'] == 'add':
-            self.town.add_seed(change['path'])
+            self.town.seed_add(change['path'])
         elif change['action'] == 'remove':
             self.town.remove(change['pathkey'])
 
@@ -370,7 +298,7 @@ class TownWizard(View):
             for i in contents:
                 self.recursive_add(i)
         else:
-            pathkey = self.town.add_seed(path)
+            pathkey = self.town.seed_add(path)
             print(f'got pathkey: {pathkey}')
 
             if pathkey != '':

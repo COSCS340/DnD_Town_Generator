@@ -33,7 +33,7 @@ class Town:
 
     # ## seed ## #
 
-    def load_seed(self, fn):
+    def seed_load(self, fn):
         # setup and reset
         self.active = True
         self.seed.people.clear()
@@ -55,7 +55,7 @@ class Town:
         for i in data['events']:
             self.seed.events[i] = data['events'][i]
 
-    def add_seed(self, path):
+    def seed_add(self, path):
         # indicate changes have been made
         self.active = True
 
@@ -84,7 +84,10 @@ class Town:
         print(part)
         return part
 
-    def build_seed(self, fn):
+    def seed_remove(self, name):
+        pass
+
+    def seed_build(self, fn):
         wdata = {}
 
         # header
