@@ -50,6 +50,10 @@ class MultiView(QWidget):
 
             # build up menu
             for m in menu:
+                self.menubar.addAction(menu[m].menuAction())
+
+            '''
+            for m in menu:
                 self.menu[m] = {}
                 tmp = self.menubar.addMenu(m)
                 for s in menu[m]:
@@ -68,6 +72,7 @@ class MultiView(QWidget):
                         if menu[m][s]['disabled'] == "True":
                             self.menu[m][s].setDisabled(True)
                     tmp.addAction(self.menu[m][s])
+            '''
 
 class View(QWidget):
     def __init__(self, multiview):
@@ -80,7 +85,43 @@ class View(QWidget):
         self.setup_view()
 
     def load_menu(self, filename):
-        self.ViewMainMenu = json.load(open(filename))
+        # get structure
+        with open(filename) as f:
+            data = json.load(f)
+
+        # build menu actions and stuff
+        self.ViewMainMenu = {}
+
+        for m in data:
+            tmenu = QMenu(m)
+
+            # build the submenu stuff
+            for item in data[m]:
+                # if separator
+                if 'separator' in data[m][item]:
+                    tmenu.addSeparator()
+                    continue
+
+                # options
+                sig = None
+                hotkey = ''
+
+                if 'signal' in data[m][item]:
+                    sig = getattr(self, data[m][item]['signal'])
+                if 'hotkey' in data[m][item]:
+                    hotkey = data[m][item]['hotkey']
+
+                # build the action
+                taction = QAction(item, tmenu, shortcut=hotkey)
+                if sig is not None:
+                    taction.triggered.connect(sig)
+
+                # add to menu
+                tmenu.addAction(taction)
+
+            # add the menu
+            self.ViewMainMenu[m] = tmenu
+
 
     def set_layout(self, layout):
         self.ViewMainWidget.setLayout(layout)
