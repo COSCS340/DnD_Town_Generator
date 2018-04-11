@@ -106,6 +106,9 @@ class Town:
 
     # ## town ## #
 
+    def gen_town(self, num_people, num_years):
+        pass
+
     def new(self):
         self.data['name'] = ''
         self.data['occupations'] = {}
