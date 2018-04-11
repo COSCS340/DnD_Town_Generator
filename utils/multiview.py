@@ -69,7 +69,6 @@ class MultiView(QWidget):
                             self.menu[m][s].setDisabled(True)
                     tmp.addAction(self.menu[m][s])
 
-
 class View(QWidget):
     def __init__(self, multiview):
         super().__init__()

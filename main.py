@@ -18,6 +18,7 @@ class Main(QMainWindow):
 
         # hit the bars
         self.mb = self.menuBar()
+        self.mb.setNativeMenuBar(False)
         self.sb = self.statusBar()
 
         # houses custom view widgets
