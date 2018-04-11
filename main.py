@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import *
 
 from utils.multiview import MultiView
 
+from views.mainmenu import MainMenu
 from views.townwizard import TownWizard
 from views.sampleview import SampleView
 
@@ -22,8 +23,9 @@ class Main(QMainWindow):
         # houses custom view widgets
         # fancy stack widget
         self.mv = MultiView(self.mb, self.sb)
+        self.mv.add_view('mainmenu', MainMenu(self.mv))
         self.mv.add_view('wizard', TownWizard(self.mv))
-        self.mv.set_view('wizard')
+        self.mv.set_view('mainmenu')
 
         # create other widgets
         self.widgets = {}
@@ -42,12 +44,21 @@ class Main(QMainWindow):
         self.layout.addWidget(self.widgets['wizard'], 0, 1)
         self.layout.addWidget(self.mv.get_widget(), 1, 0, 1, 2)
 
+        # Add actions to buttons
+        self.widgets['home'].clicked.connect(self.load_main_menu)
+        self.widgets['wizard'].clicked.connect(self.load_wizard)
+
         # set center
         self.setCentralWidget(self.widgets['main'])
 
         # show
         self.show()
 
+    def load_main_menu(self):
+        self.mv.set_view('mainmenu')
+
+    def load_wizard(self):
+        self.mv.set_view('wizard')
 
 if __name__ == '__main__':
     # QT IT UP
