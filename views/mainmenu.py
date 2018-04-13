@@ -1,8 +1,10 @@
 """ This is the main menu for the generator. """
 
 import sys
+from PyQt5.QtWidgets import QGridLayout, QLabel, QLayoutItem
+from  PyQt5.QtCore import Qt
+from PyQt5.QtGui import QImage, QIcon, QPixmap
 from utils.multiview import View
-from PyQt5.QtWidgets import QGridLayout
 
 class MainMenu(View):
     """ Class that contains opening screen of program. """
@@ -13,9 +15,21 @@ class MainMenu(View):
         # set up dictionary of widgets and layouts to easily find.
         self.widgets = {}
         self.layouts = {}
+        self.setupInterface()
 
     def setupInterface(self):
         self.layouts['main'] = QGridLayout()
+        print(self.layouts['main'])
+
+        self.widgets['welcomelabel'] = QLabel("Welcome!")
+
+        self.widgets['image'] = QLabel()
+        pixmap = QPixmap('img/dnd.jpg')
+        # pixmap.resize(600, 600)
+        self.widgets['image'].setPixmap(pixmap.scaled(500,500, Qt.KeepAspectRatio))
+
+        self.layouts['main'].addWidget(self.widgets['welcomelabel'], 0, 0)
+        self.layouts['main'].addWidget(self.widgets['image'], 1, 0)
 
         self.set_layout(self.layouts['main'])
 
