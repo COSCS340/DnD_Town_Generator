@@ -15,6 +15,15 @@ class TownSeed:
     def __init__(self):
         self.people = {}
         self.events = {}
+        self.names = {}
+        self.active = False
+
+        # names structure
+        self.names['first'] = []
+        self.names['last'] = []
+
+    def check_integrity(self):
+        return True
 
 
 class Town:
@@ -47,22 +56,24 @@ class Town:
         if data['type'] != 'Seed':
             return
 
-        # load people
-        for i in data['people']:
-            self.seed.people[i] = data['people'][i]
+        # load things
+        self.seed.people = data['people']
+        self.seed.events = data['events']
+        self.seed.names = data['names']
 
-        # load events
-        for i in data['events']:
-            self.seed.events[i] = data['events'][i]
+        # check integrity
+        good = self.seed.check_integrity()
+        if not good: return
 
     def seed_add(self, path):
         # indicate changes have been made
         self.active = True
 
         # get current directory for string manipulation
-        # TODO: error check for .json
+        # FIXME: this does not work
         curr = os.path.dirname(os.path.abspath(__file__))
         print(curr)
+
         # get partial but still unique path
         part = path[len(curr)+6:]
 
@@ -77,6 +88,11 @@ class Town:
             self.seed.people[f['title']] = f
         elif f['type'] == 'Event':
             self.seed.events[f['title']] = f
+        elif f['type'] == 'Names':
+            # merge new names into existing names
+            # TODO: remove duplicates
+            self.seed.names['first'].append(f['first'])
+            self.seed.names['last'].append(f['last'])
         else:
             return ''
 
@@ -90,16 +106,20 @@ class Town:
     def seed_build(self, fn):
         wdata = {}
 
+        # check integrity
+        good = self.seed.check_integrity()
+        if not good: return
+
         # header
         wdata['type'] = 'Seed'
         wdata['people'] = {}
         wdata['events'] = {}
+        wdata['names'] = {}
 
         # insert data
-        for i in self.seed.people:
-            wdata['people'][i] = self.seed.people[i]
-        for i in self.seed.events:
-            wdata['events'][i] = self.seed.events[i]
+        wdata['people'] = self.seed.people
+        wdata['events'] = self.seed.events
+        wdata['names'] = self.seed.names
 
         with open(fn, 'w') as f:
             json.dump(wdata, f)
