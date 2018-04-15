@@ -23,7 +23,12 @@ class TownSeed:
         self.names['last'] = []
 
     def check_integrity(self):
-        return True
+        if len(self.names['first']) == 0:
+            return False
+        elif len(self.people) == 0:
+            return False
+        else:
+            return True
 
 
 class Town:

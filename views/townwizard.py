@@ -115,6 +115,12 @@ class TownWizard(View):
             self.set_status('Nothing to make a seed out of')
             return
 
+        good = self.town.seed.check_integrity()
+
+        if not good:
+            self.set_status('Bad seed (MAKE BETTER ERROR)')
+            return
+
         # get filename
         fn, _ = QFileDialog.getSaveFileName(self, 'Save File', './seeds')
         if fn != '':
