@@ -3,7 +3,7 @@
 import sys
 from PyQt5.QtWidgets import QGridLayout, QLabel, QLayoutItem
 from  PyQt5.QtCore import Qt
-from PyQt5.QtGui import QImage, QIcon, QPixmap
+from PyQt5.QtGui import QImage, QIcon, QPixmap, QFont
 from utils.multiview import View
 
 class MainMenu(View):
@@ -19,20 +19,22 @@ class MainMenu(View):
 
     def setupInterface(self):
         self.layouts['main'] = QGridLayout()
-        print(self.layouts['main'])
 
-        self.widgets['welcomelabel'] = QLabel("Welcome!")
+        self.widgets['welcomelabel'] = QLabel("Welcome! "
+                                               "To begin, load your town "
+                                               "into the wizard, or click help")
+        font = QFont("Arial", 18)
+        self.widgets['welcomelabel'].setFont(font)
 
         self.widgets['image'] = QLabel()
         pixmap = QPixmap('img/dnd4_resized.png')
-        # pixmap.resize(600, 600)
-        self.widgets['image'].setPixmap(pixmap)  # .scaled(500,500, Qt.KeepAspectRatio))
+        self.widgets['image'].setPixmap(pixmap)
 
         self.layouts['main'].addWidget(self.widgets['welcomelabel'], 0, 1)
         self.layouts['main'].addWidget(self.widgets['image'], 1, 1)
-        self.layouts['main'].setColumnStretch(0,1)
-        self.layouts['main'].setColumnStretch(2,1)
-        self.layouts['main'].setRowStretch(2,1)
+        self.layouts['main'].setColumnStretch(0, 1)
+        self.layouts['main'].setColumnStretch(2, 1)
+        self.layouts['main'].setRowStretch(2, 1)
 
         self.set_layout(self.layouts['main'])
 

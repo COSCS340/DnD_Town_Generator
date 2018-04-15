@@ -22,6 +22,7 @@ class MultiView(QWidget):
     def __init__(self, menubar, statusbar):
         super().__init__()
         self.menubar = menubar
+        self.menubar.setNativeMenuBar(False)
         self.statusbar = statusbar
         self.MultiViewWidget = QStackedWidget()
         self.current_view = None
