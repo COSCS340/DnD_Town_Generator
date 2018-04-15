@@ -24,12 +24,15 @@ class MainMenu(View):
         self.widgets['welcomelabel'] = QLabel("Welcome!")
 
         self.widgets['image'] = QLabel()
-        pixmap = QPixmap('img/dnd.jpg')
+        pixmap = QPixmap('img/dnd4_resized.png')
         # pixmap.resize(600, 600)
-        self.widgets['image'].setPixmap(pixmap.scaled(500,500, Qt.KeepAspectRatio))
+        self.widgets['image'].setPixmap(pixmap)  # .scaled(500,500, Qt.KeepAspectRatio))
 
-        self.layouts['main'].addWidget(self.widgets['welcomelabel'], 0, 0)
-        self.layouts['main'].addWidget(self.widgets['image'], 1, 0)
+        self.layouts['main'].addWidget(self.widgets['welcomelabel'], 0, 1)
+        self.layouts['main'].addWidget(self.widgets['image'], 1, 1)
+        self.layouts['main'].setColumnStretch(0,1)
+        self.layouts['main'].setColumnStretch(2,1)
+        self.layouts['main'].setRowStretch(2,1)
 
         self.set_layout(self.layouts['main'])
 
