@@ -10,6 +10,7 @@ from utils.multiview import MultiView
 from views.mainmenu import MainMenu
 from views.townwizard import TownWizard
 from views.sampleview import SampleView
+from views.helpscreen import HelpMenu
 
 
 class Main(QMainWindow):
@@ -26,6 +27,7 @@ class Main(QMainWindow):
         self.mv = MultiView(self.mb, self.sb)
         self.mv.add_view('mainmenu', MainMenu(self.mv))
         self.mv.add_view('wizard', TownWizard(self.mv))
+        self.mv.add_view('help', HelpMenu(self.mv))
         self.mv.set_view('mainmenu')
 
         # create other widgets
@@ -33,6 +35,7 @@ class Main(QMainWindow):
         self.widgets['main'] = QWidget()
         self.widgets['home'] = QPushButton('Home')
         self.widgets['wizard'] = QPushButton('Wizard')
+        self.widgets['help'] = QPushButton('Help')
 
         # create a base layout
         self.layout = QGridLayout()
@@ -43,11 +46,13 @@ class Main(QMainWindow):
         # add to the layout
         self.layout.addWidget(self.widgets['home'], 0, 0)
         self.layout.addWidget(self.widgets['wizard'], 0, 1)
-        self.layout.addWidget(self.mv.get_widget(), 1, 0, 1, 2)
+        self.layout.addWidget(self.widgets['help'], 0, 2)
+        self.layout.addWidget(self.mv.get_widget(), 1, 0, 1, 3)
 
         # Add actions to buttons
         self.widgets['home'].clicked.connect(self.load_main_menu)
         self.widgets['wizard'].clicked.connect(self.load_wizard)
+        self.widgets['help'].clicked.connect(self.load_help)
 
         # set center
         self.setCentralWidget(self.widgets['main'])
@@ -60,6 +65,9 @@ class Main(QMainWindow):
 
     def load_wizard(self):
         self.mv.set_view('wizard')
+
+    def load_help(self):
+        self.mv.set_view('help')
 
 if __name__ == '__main__':
     # QT IT UP
