@@ -75,7 +75,7 @@ class Town:
         print(curr)
 
         # get partial but still unique path
-        part = path[len(curr)+6:]
+        part = path.split('data')[1]  # path[len(curr)+6:]
 
         # open file
         # TODO: error check this

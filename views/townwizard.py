@@ -309,6 +309,7 @@ class TownWizard(View):
                 self.set_status('Error: ' + fullname + ' is not valid')
 
     def log_change(self, action, pathkey, path):
+        '''
         # log it
         self.changes.log({'action': action, 'path': path, 'pathkey': pathkey})
 
@@ -319,4 +320,8 @@ class TownWizard(View):
 
         # update
         self.update_menu()
+        self.update_staging()
+        '''
+
+        print('logging change (lol not really)')
         self.update_staging()
