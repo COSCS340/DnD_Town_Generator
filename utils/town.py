@@ -5,20 +5,129 @@
 # TODO: Add error checking
 # TODO:
 
-import os, glob, json
+
+import os
+import glob
+import json
+
+
+class TownSeed:
+    def __init__(self):
+        self.people = {}
+        self.events = {}
+        self.names = {}
+        self.active = False
+
+        # names structure
+        self.names['first'] = []
+        self.names['last'] = []
+
+    def check_integrity(self):
+        return True
+
 
 class Town:
     def __init__(self):
         self.data = {}
-        self.mods = {}
-        self.stats = {}
         self.active = False
+
+        # start new TownSeed class
+        self.seed = TownSeed()
 
         # set blanks
         self.data['name'] = ''
         self.data['population'] = ''
         self.data['occupations'] = {}
         self.data['events'] = {}
+
+    # ## seed ## #
+
+    def seed_load(self, fn):
+        # setup and reset
+        self.active = True
+        self.seed.people.clear()
+        self.seed.events.clear()
+
+        # open file
+        with open(fn, 'r') as f:
+            data = json.load(f)
+
+        # integrity check
+        if data['type'] != 'Seed':
+            return
+
+        # load things
+        self.seed.people = data['people']
+        self.seed.events = data['events']
+        self.seed.names = data['names']
+
+        # check integrity
+        good = self.seed.check_integrity()
+        if not good: return
+
+    def seed_add(self, path):
+        # indicate changes have been made
+        self.active = True
+
+        # get current directory for string manipulation
+        # FIXME: this does not work
+        curr = os.path.dirname(os.path.abspath(__file__))
+        print(curr)
+
+        # get partial but still unique path
+        part = path[len(curr)+6:]
+
+        # open file
+        # TODO: error check this
+        f = json.load(open(path))
+
+        # TODO: integrity check the file
+
+        # check type
+        if f['type'] == 'Person':
+            self.seed.people[f['title']] = f
+        elif f['type'] == 'Event':
+            self.seed.events[f['title']] = f
+        elif f['type'] == 'Names':
+            # merge new names into existing names
+            # TODO: remove duplicates
+            self.seed.names['first'].append(f['first'])
+            self.seed.names['last'].append(f['last'])
+        else:
+            return ''
+
+        # TODO: actually error check
+        print(part)
+        return part
+
+    def seed_remove(self, name):
+        pass
+
+    def seed_build(self, fn):
+        wdata = {}
+
+        # check integrity
+        good = self.seed.check_integrity()
+        if not good: return
+
+        # header
+        wdata['type'] = 'Seed'
+        wdata['people'] = {}
+        wdata['events'] = {}
+        wdata['names'] = {}
+
+        # insert data
+        wdata['people'] = self.seed.people
+        wdata['events'] = self.seed.events
+        wdata['names'] = self.seed.names
+
+        with open(fn, 'w') as f:
+            json.dump(wdata, f)
+
+    # ## town ## #
+
+    def gen_town(self, num_people, num_years):
+        pass
 
     def new(self):
         self.data['name'] = ''
@@ -35,29 +144,6 @@ class Town:
         self.mods.clear()
         self.active = False
 
-    def add(self, path):
-        # indicate changes have been made
-        self.active = True
-
-        # get current directory for string manipulation
-        # TODO: error check for .json
-        curr = os.path.dirname(os.path.abspath(__file__))
-
-        # get partial but still unique path
-        part = path[len(curr)+6:]
-
-        # open file
-        # TODO: error check this
-        f = json.load(open(path))
-
-        # add
-        self.mods[part] = {}
-        self.mods[part]['path'] = path
-        self.mods[part]['data'] = f
-
-        # TODO: actually error check
-        return part
-
     def remove(self, path):
         change = self.mods.pop(path)
 
@@ -67,7 +153,8 @@ class Town:
     def getPath(self, pathkey):
         if pathkey in self.mods:
             return self.mods[pathkey]['path']
-        else: return ''
+        else:
+            return ''
 
     def build(self, fn, tn, pop):
         if self.active:
@@ -77,7 +164,8 @@ class Town:
 
             for i in self.mods:
                 if 'occupations' in self.mods[i]['data']:
-                    self.data['occupations'].update(self.mods[i]['data']['occupations'])
+                    self.data['occupations'].\
+                        update(self.mods[i]['data']['occupations'])
                 if 'events' in self.mods[i]['data']:
                     self.data['events'].update(self.mods[i]['data']['events'])
 
@@ -85,14 +173,12 @@ class Town:
             with open(fn, 'w') as fp:
                 json.dump(self.data, fp)
 
-            # reset
-            #self.active = False
-
             # return success
             return True
-        else: return False
+        else:
+            return False
 
-    ## get functions
+    # get functions #
 
     # data grabbing
     def get_people(self):
@@ -100,7 +186,8 @@ class Town:
 
     # HWAPATEWEE
     def spit(self):
-        if not self.active: return
+        if not self.active:
+            return
         print('Name: ' + self.data['name'])
         print('Population: ' + str(self.data['population']))
         print('Occupations:')
@@ -111,4 +198,5 @@ class Town:
             print('  ' + i + ': ' + self.data['events'][i]['description'])
             print('  Outcomes:')
             for j in self.data['events'][i]['outcomes']:
-                print('    ' + j + ': ' + self.data['events'][i]['outcomes'][j]['description'])
+                desc = self.data['events'][i]['outcomes'][j]['description']
+                print(f'    {j}: {desc}')

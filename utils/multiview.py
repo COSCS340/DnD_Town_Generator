@@ -35,7 +35,9 @@ class MultiView(QWidget):
 
     def set_view(self, name, update_menu=True):
         if name in self.views:
-            self.MultiViewWidget.setCurrentWidget(self.views[name].get_widget())
+            self.MultiViewWidget.setCurrentWidget(
+                self.views[name].get_widget()
+            )
             self.current_view = self.views[name]
         if update_menu:
             self.set_menu(self.views[name].get_menu())

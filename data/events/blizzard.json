@@ -1,17 +1,16 @@
 {
+    "type": "Event",
+    "title": "Blizzard",
+    "description": "A blizzard covers the town waist deep in snow",
     "events": {
-        "blizzard": {
-            "description": "A blizzard covers the town waist deep in snow",
-            "outcomes": {
-                "town destroyed": {
-                    "description": "Everyone froze because fire doesn't exist",
-                    "chance": 50
-                },
-                "heavy damage": {
-                    "description": "4 people died",
-                    "chance": 40
-                }
-            }
+        "1": {
+            "Light damage": "2 people died and 4 cows were cut open like Taun-Tauns in Star Wars"
+        },
+        "2": {
+            "Heavy Damage": "4 people died"
+        },
+        "3": {
+            "Town destroyed": "Everyone froze because fire doesn't exist"
         }
     }
 }
