@@ -74,6 +74,7 @@ class TownWizard(View):
         self.widgets['gen-seed'].clicked.connect(self.seedgensig)
         self.widgets['tree'].doubleClicked.connect(self.seedaddsig)
         self.widgets['load-seed'].clicked.connect(self.seedloadsig)
+        self.widgets['town-gen'].clicked.connect(self.towngensig)
 
     def setup_layouts(self):
         # initialize layouts
@@ -152,6 +153,19 @@ class TownWizard(View):
 
     # ## build signals ## #
 
+    def towngensig(self):
+        # error check
+        if self.widgets['town-name'].text() == '':
+            return
+        # variables
+        tname = self.widgets['town-name'].text()
+        pop = int(self.widgets['town-pop'].text())
+
+        if pop
+
+        name, _ = QFileDialog.getOpenFileName(self, 'Open File', './towns')
+
+
     # ## signals ## #
 
     def spitsig(self):
@@ -194,19 +208,6 @@ class TownWizard(View):
         self.town.new()
         self.set_status('New town loaded')
         self.update_staging()
-
-    def loadsig(self):
-        if self.town.active:
-            reply = QMessageBox.question(self,
-                                         'Error', "A town is already loaded. \
-                                         Do you want to continue?",
-                                         QMessageBox.Yes | QMessageBox.No,
-                                         QMessageBox.No)
-            if reply == QMessageBox.Yes:
-                self.town.clear()
-                self.load_town()
-        else:
-            self.load_town()
 
     def buildsig(self):
         # get town name
