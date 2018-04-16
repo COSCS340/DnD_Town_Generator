@@ -99,8 +99,12 @@ class Town:
         elif f['type'] == 'Names':
             # merge new names into existing names
             # TODO: remove duplicates
-            self.seed.names['first'].append(f['first'])
-            self.seed.names['last'].append(f['last'])
+            if 'male' in f:
+                self.seed.names['male'] = f['male']
+            if 'female' in f:
+                self.seed.names['female'] = f['female']
+            if 'last' in f:
+                self.seed.names['last'] = f['last']
         else:
             return ''
 

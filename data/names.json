@@ -1,9 +1,11 @@
 {
     "type": "Names",
-    "first": [
+    "female": [
         "Maurice",
         "Isadora",
-        "Brejak",
+        "Brejak"
+    ],
+    "male": [
         "Kevin"
     ],
     "last": [
