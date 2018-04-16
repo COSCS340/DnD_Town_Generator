@@ -156,14 +156,18 @@ class TownWizard(View):
     def towngensig(self):
         # error check
         if self.widgets['town-name'].text() == '':
+            self.set_status('No town name given')
             return
+        if self.widgets['town-pop'].text() == '':
+            self.set_status('No population given')
+            return
+
         # variables
         tname = self.widgets['town-name'].text()
         pop = int(self.widgets['town-pop'].text())
+        fname, _ = QFileDialog.getSaveFileName(self, 'Save File', './towns')
 
-        if pop
-
-        name, _ = QFileDialog.getOpenFileName(self, 'Open File', './towns')
+        self.town.gen_town(pop, 5, tname, fname)
 
 
     # ## signals ## #

@@ -9,6 +9,7 @@
 import os
 import glob
 import json
+from random import randint  # lolz so random xD
 
 from utils.person import Person
 
@@ -49,7 +50,7 @@ class Town:
     def seed_load(self, fn):
         # setup and reset
         self.active = True
-        self.seed.people.clear()
+        self.seed.occupations.clear()
         self.seed.events.clear()
 
         # open file
@@ -61,7 +62,7 @@ class Town:
             return
 
         # load things
-        self.seed.people = data['people']
+        self.seed.occupations = data['occupations']
         self.seed.events = data['events']
         self.seed.names = data['names']
 
@@ -89,7 +90,7 @@ class Town:
 
         # check type
         if f['type'] == 'Person':
-            self.seed.people[f['title']] = f
+            self.seed.occupations[f['title']] = f
         elif f['type'] == 'Event':
             self.seed.events[f['title']] = f
         elif f['type'] == 'Names':
@@ -120,12 +121,12 @@ class Town:
 
         # header
         wdata['type'] = 'Seed'
-        wdata['people'] = {}
+        wdata['occupations'] = {}
         wdata['events'] = {}
         wdata['names'] = {}
 
         # insert data
-        wdata['people'] = self.seed.people
+        wdata['occupations'] = self.seed.occupations
         wdata['events'] = self.seed.events
         wdata['names'] = self.seed.names
 
@@ -136,29 +137,33 @@ class Town:
 
     def name_people(self, num_people):
         for i in range(0, num_people):
+            print('Person: ' + str(i))
             tmp = Person()
             s = randint(0,1)
             if s == 0:
+                print('  male')
                 tmp.sex = 'm'
-                f = randint(0, len(self.seed.names['male']))
+                f = randint(0, len(self.seed.names['male']) - 1)
                 tmp.fname = self.seed.names['male'][f]
             else:
+                print('  female')
                 tmp.sex = 'f'
-                f = randint(0, len(self.seed.names['female']))
+                f = randint(0, len(self.seed.names['female']) - 1)
                 tmp.fname = self.seed.names['female'][f]
-
-            l = randint(0, len(self.seed.names['last']))
+            print('  first name: ' + tmp.fname)
+            l = randint(0, len(self.seed.names['last']) - 1)
             tmp.fname = self.seed.names['last'][l]
 
-            o = randint(0,len(self.seed.occupations))
-            tmp.ocupation = 'j' 
+            o = randint(0,len(self.seed.occupations) - 1)
+            tmp.ocupation = 'j'
 
             # names are given in self.seed.names['first'/'last']
 
-            self.people.append(Person())
+            self.citizens.append(Person())
 
 
-    def gen_town(self, num_people, num_years, filename):
+    def gen_town(self, num_people, num_years, tname, filename):
+        self.name = tname
         self.name_people(num_people)
 
         for i in range(0, num_years): #loop on number of years
@@ -174,7 +179,7 @@ class Town:
                         print('Giving an event 3')#pick a 3
 
             # after everything generated, export
-            self.export(filename)
+            # self.export(filename)
 
     def new(self):
         self.name = ''
@@ -198,6 +203,9 @@ class Town:
             self.data['name'] = self.name
             self.data['population'] = self.population
             self.data['people'] = self.citizens
+
+            for i in range(0, len(self.citizens)):
+                self.data['people'][i.name] = {}
 
             # write the file
             with open(fn, 'w') as fp:
