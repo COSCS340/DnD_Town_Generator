@@ -134,7 +134,7 @@ class TownWizard(View):
 
         self.town.seed_load(name)
         self.widgets['load-text'].setText(name)
-        self.set_status(f'Seed {name} loaded')
+        self.set_status('Seed ' + name + ' loaded')
 
     def seedaddsig(self):
         # get file name from tree
@@ -299,7 +299,7 @@ class TownWizard(View):
                 self.recursive_add(i)
         else:
             pathkey = self.town.seed_add(path)
-            print(f'got pathkey: {pathkey}')
+            print('got pathkey: ' + pathkey)
 
             if pathkey != '':
                 self.set_status('Added: ' + path)

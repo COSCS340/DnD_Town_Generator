@@ -199,4 +199,4 @@ class Town:
             print('  Outcomes:')
             for j in self.data['events'][i]['outcomes']:
                 desc = self.data['events'][i]['outcomes'][j]['description']
-                print(f'    {j}: {desc}')
+                print('    ' + j + ': ' + desc)
