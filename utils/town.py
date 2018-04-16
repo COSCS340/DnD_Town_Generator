@@ -15,7 +15,7 @@ from utils.person import Person
 
 class TownSeed:
     def __init__(self):
-        self.people = {}
+        self.people = []
         self.events = {}
         self.names = {}
         self.active = False
@@ -141,6 +141,12 @@ class Town:
 
 
     def gen_town(self, num_people, num_years):
+        # initialize the people to population size
+        for i in range(0, num_people):
+            var = Person()
+            # TODO: do yo thing on each person
+            self.people.append(Person())
+
         for i in range(0, num_years): #loop on number of years
             for j in range(0, num_people):
                 r = randint(0, 4)
