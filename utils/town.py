@@ -21,7 +21,8 @@ class TownSeed:
         self.active = False
 
         # names structure
-        self.names['first'] = []
+        self.names['m'] = []
+        self.names['f'] = []
         self.names['last'] = []
 
     def check_integrity(self):
