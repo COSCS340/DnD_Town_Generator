@@ -135,17 +135,20 @@ class Town:
 
     def name_people(self, num_people):
         for i in range(0, num_people):
-            r = randint(0, 0) #get a random number
-            #use it to look up a name
-            self.people.name = 'John Doe ' #assign a name to that person
+            tmp = Person()
+            # TODO: do yo thing on each person
+            # 2 random numbers
+            # grab from first and last
+            # add names to tmp
+            # append (which is below)
+
+            # names are given in self.seed.names['first'/'last']
+
+            self.people.append(Person())
 
 
     def gen_town(self, num_people, num_years):
-        # initialize the people to population size
-        for i in range(0, num_people):
-            var = Person()
-            # TODO: do yo thing on each person
-            self.people.append(Person())
+        self.name_people(num_people)
 
         for i in range(0, num_years): #loop on number of years
             for j in range(0, num_people):
