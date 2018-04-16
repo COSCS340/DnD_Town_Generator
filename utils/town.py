@@ -131,14 +131,30 @@ class Town:
 
     # ## town ## #
 
+    def name_people(self, num_people):
+        for i in range(0, num_people):
+            r = randint(0, 0) #get a random number
+            #use it to look up a name
+            self.people.name = 'John Doe ' #assign a name to that person
+            
+
     def gen_town(self, num_people, num_years):
-        pass
-
-    def new(self):
-        self.data['name'] = ''
-        self.data['occupations'] = {}
-        self.data['events'] = {}
-
+        for i in range(0, num_years): #loop on number of years
+            for j in range(0, num_people):
+                r = randint(0, 4)
+                if r == 4:
+                    r = randint(0,9)
+                    if r < 6:
+                        print('Giving an event 1')#pick an event
+                    else if r < 9:
+                        print('Giving an event 2')#pick a 2
+                    else:
+                        printf('Giving an event 3')#pick a 3
+                        def new(self):
+                        self.data['name'] = ''
+                        self.data['occupations'] = {}
+                        self.data['events'] = {}
+                        
     def load(self, fn):
         self.active = True
         with open(fn, 'r') as fp:
