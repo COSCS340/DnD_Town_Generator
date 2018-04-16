@@ -15,7 +15,7 @@ from utils.person import Person
 
 class TownSeed:
     def __init__(self):
-        self.people = {}
+        self.occupations = {}
         self.events = {}
         self.names = {}
         self.active = False
@@ -137,11 +137,21 @@ class Town:
     def name_people(self, num_people):
         for i in range(0, num_people):
             tmp = Person()
-            # TODO: do yo thing on each person
-            # 2 random numbers
-            # grab from first and last
-            # add names to tmp
-            # append (which is below)
+            s = randint(0,1)
+            if s == 0:
+                tmp.sex = 'm'
+                f = randint(0, len(self.seed.names['male']))
+                tmp.fname = self.seed.names['male'][f]
+            else:
+                tmp.sex = 'f'
+                f = randint(0, len(self.seed.names['female']))
+                tmp.fname = self.seed.names['female'][f]
+
+            l = randint(0, len(self.seed.names['last']))
+            tmp.fname = self.seed.names['last'][l]
+
+            o = randint(0,len(self.seed.occupations))
+            tmp.ocupation = 'j' 
 
             # names are given in self.seed.names['first'/'last']
 
