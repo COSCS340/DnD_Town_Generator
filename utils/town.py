@@ -10,6 +10,8 @@ import os
 import glob
 import json
 
+from utils.person import Person
+
 
 class TownSeed:
     def __init__(self):
