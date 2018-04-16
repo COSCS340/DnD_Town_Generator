@@ -15,7 +15,7 @@ from utils.person import Person
 
 class TownSeed:
     def __init__(self):
-        self.people = []
+        self.people = {}
         self.events = {}
         self.names = {}
         self.active = False
@@ -26,27 +26,23 @@ class TownSeed:
         self.names['last'] = []
 
     def check_integrity(self):
-        if len(self.names['first']) == 0:
-            return False
-        elif len(self.people) == 0:
-            return False
-        else:
-            return True
+        # TODO: actually do this sometime
+        return True
 
 
 class Town:
     def __init__(self):
-        self.data = {}
         self.active = False
 
         # start new TownSeed class
         self.seed = TownSeed()
 
-        # set blanks
-        self.data['name'] = ''
-        self.data['population'] = ''
-        self.data['occupations'] = {}
-        self.data['events'] = {}
+        self.data = None
+
+        self.name = ''
+        self.population = 0
+        self.citizens = []
+        self.events = {}
 
     # ## seed ## #
 
@@ -152,7 +148,7 @@ class Town:
             self.people.append(Person())
 
 
-    def gen_town(self, num_people, num_years):
+    def gen_town(self, num_people, num_years, filename):
         self.name_people(num_people)
 
         for i in range(0, num_years): #loop on number of years
@@ -167,26 +163,16 @@ class Town:
                     else:
                         print('Giving an event 3')#pick a 3
 
-    def new(self):
-        self.data['name'] = ''
-        self.data['occupations'] = {}
-        self.data['events'] = {}
+            # after everything generated, export
+            self.export(filename)
 
-    def load(self, fn):
-        self.active = True
-        with open(fn, 'r') as fp:
-            self.data = json.load(fp)
+    def new(self):
+        self.name = ''
+        self.citizens.clear()
+        self.events.clear()
 
     def clear(self):
-        self.data.clear()
-        self.mods.clear()
         self.active = False
-
-    def remove(self, path):
-        change = self.mods.pop(path)
-
-        # TODO: actually error check
-        return True
 
     def getPath(self, pathkey):
         if pathkey in self.mods:
@@ -194,18 +180,14 @@ class Town:
         else:
             return ''
 
-    def build(self, fn, tn, pop):
+    def export(self, fn):
+        self.data = {}
+
         if self.active:
             # make changes
-            self.data['name'] = tn
-            self.data['population'] = int(pop)
-
-            for i in self.mods:
-                if 'occupations' in self.mods[i]['data']:
-                    self.data['occupations'].\
-                        update(self.mods[i]['data']['occupations'])
-                if 'events' in self.mods[i]['data']:
-                    self.data['events'].update(self.mods[i]['data']['events'])
+            self.data['name'] = self.name
+            self.data['population'] = self.population
+            self.data['people'] = self.citizens
 
             # write the file
             with open(fn, 'w') as fp:
