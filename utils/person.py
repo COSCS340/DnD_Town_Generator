@@ -1,6 +1,7 @@
 class Person:
     def __init__(self):
-        self.name = ''
+        self.fname = ''
+        self.lname = ''
         self.age = -1
         self.occupation = ''
         self.mother = ''
