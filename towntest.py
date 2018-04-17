@@ -1,18 +1,40 @@
+import sys
 from utils.town import Town
 
-if __name__ == "__main__":
-    t = Town()
 
+# get command line arguments
+cla = len(sys.argv)
+
+if cla < 3:
+    print('Usage: towntest.py num_people num_years [pathtoseed]')
+    exit()
+if cla == 3 or cla == 4:
+    nump = int(sys.argv[1])
+    numy = int(sys.argv[2])
+else:
+    nump = 5
+    numy = 5
+
+if cla == 4:
+    path = sys.argv[3]
+else:
+    path = ''
+
+t = Town()
+
+if path == '':
     t.seed_add('data/people/common/farmer.json')
     t.seed_add('data/names.json')
     t.seed_build('testseed.json')
-
     t.seed_load('testseed.json')
-    t.gen_town(50, 5, "test town", "literallypointless.json")
+else:
+    t.seed_load(path)
 
-    print('TEST RESULTS:')
+t.gen_town(nump, numy, "test town", "literallypointless.json")
 
-    for i in t.citizens:
-        print((f'NAME: {i.fname} {i.lname}\n'
-               f'SEX: {i.sex}\n'
-               f'LIFE?: {i.life}\n\n'))
+print('TEST RESULTS:')
+
+for i in t.citizens:
+    print((f'NAME: {i.fname} {i.lname}\n'
+           f'SEX: {i.sex}\n'
+           f'LIFE?: {i.life}\n'))
