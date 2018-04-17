@@ -149,25 +149,26 @@ class Town:
 
     def name_people(self, num_people):
         for i in range(0, num_people):
-            print('Person: ' + str(i))
+            # print('Person: ' + str(i))
             tmp = Person()
             s = randint(0, 1)
             if s == 0:
-                print('  male')
+                # print('  male')
                 tmp.sex = 'm'
                 f = randint(0, len(self.seed.names['male']) - 1)
                 tmp.fname = self.seed.names['male'][f]
             else:
-                print('  female')
+                # print('  female')
                 tmp.sex = 'f'
                 f = randint(0, len(self.seed.names['female']) - 1)
                 tmp.fname = self.seed.names['female'][f]
-            print('  first name: ' + tmp.fname)
+            # print('  first name: ' + tmp.fname)
             ln = randint(0, len(self.seed.names['last']) - 1)
-            tmp.fname = self.seed.names['last'][ln]
+            tmp.lname = self.seed.names['last'][ln]
 
             o = randint(0, len(self.seed.occupations) - 1)
             tmp.ocupation = 'j'
+            print(f'{tmp.fname} {tmp.lname} - Sex: {tmp.sex}')
 
             self.citizens.append(Person())
 
