@@ -166,10 +166,10 @@ class Town:
             o = randint(0, len(self.seed.occupations) - 1)
             tmp.ocupation = o
 
-            a = randint(0,100)
+            a = randint(0, 100)
             tmp.age = a
 
-            self.citizens.append(Person())
+            self.citizens.append(tmp)
 
     def gen_town(self, num_people, num_years, tname, filename):
         self.name = tname
