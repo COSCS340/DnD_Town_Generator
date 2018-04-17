@@ -176,31 +176,26 @@ class Town:
 
         for i in range(0, num_years):  # loop on number of years
             for j in range(0, num_people):
+                # get citizen in question
+                cit = self.citizens[j]
+                occ = cit.occupation
+
+                # roll chance
                 r = randint(0, 4)
+
                 if r == 4:
                     r = randint(0, 10)
+                    # grab relevant occupations
                     if r < 6:
-                        #Occupation 1
-                        r = randint(0, len(self.seed.occupations                        
-                        [self.citizens[j].occupation]['events']['1'])-1)
-
-                        self.citizens[j].life.append(self.seed.occupations
-                        [self.citizens[j].occupation]['events']['1'][r])
+                        occs = self.seed.occupations[occ]['events']['1']
                     elif r < 9:
-                        r = randint(0, len(self.seed.occupations                        
-                        [self.citizens[j].occupation]['events']['2'])-1)
-
-                        self.citizens[j].life.append(self.seed.occupations
-                        [self.citizens[j].occupation]['events']['2'][r])
-                    elif r == 9:
-                        r = randint(0, len(self.seed.occupations                        
-                        [self.citizens[j].occupation]['events']['3'])-1)
-
-                        self.citizens[j].life.append(self.seed.occupations
-                        [self.citizens[j].occupation]['events']['3'][r])
+                        occs = self.seed.occupations[occ]['events']['2']
                     else:
-                        #Universal 3
-                        print('Giving an event 3')  # pick a 3
+                        occs = self.seed.occupations[occ]['events']['3']
+
+                    # get random event and add
+                    r = randint(0, len(occs) - 1)
+                    cit.life.append(occs[r])
 
             # after everything generated, export
             # self.export(filename)
