@@ -51,7 +51,7 @@ class Main(QMainWindow):
         self.layout.addWidget(self.widgets['wizard'], 0, 1)
         self.layout.addWidget(self.widgets['help'], 0, 3)
         self.layout.addWidget(self.widgets['display'], 0, 2)
-        self.layout.addWidget(self.mv.get_widget(), 1, 0, 1, 3)
+        self.layout.addWidget(self.mv.get_widget(), 1, 0, 1, 4)
 
         # Add actions to buttons
         self.widgets['home'].clicked.connect(self.load_main_menu)
