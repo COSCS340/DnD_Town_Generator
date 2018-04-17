@@ -45,6 +45,10 @@ class MultiView(QWidget):
     def get_widget(self):
         return self.MultiViewWidget
 
+    def access(self, name):
+        if name in self.views:
+            return self.views[name]
+
     def set_menu(self, menu):
         if self.menubar is not None and menu is not None:
             # clear menu things
@@ -76,6 +80,7 @@ class MultiView(QWidget):
                             self.menu[m][s].setDisabled(True)
                     tmp.addAction(self.menu[m][s])
             '''
+
 
 class View(QWidget):
     def __init__(self, multiview):
@@ -124,7 +129,6 @@ class View(QWidget):
 
             # add the menu
             self.ViewMainMenu[m] = tmenu
-
 
     def set_layout(self, layout):
         self.ViewMainWidget.setLayout(layout)
