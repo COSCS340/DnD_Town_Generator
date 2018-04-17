@@ -47,6 +47,7 @@ class TownWizard(View):
         self.widgets['load-text'] = QLineEdit()
         self.widgets['town-name'] = QLineEdit()
         self.widgets['town-pop'] = QLineEdit()
+        self.widgets['town-years'] = QLineEdit()
         self.widgets['town-gen'] = QPushButton('Generate Town')
 
         # tree stuff
@@ -69,6 +70,7 @@ class TownWizard(View):
         self.widgets['load-text'].setPlaceholderText('Seed')
         self.widgets['town-name'].setPlaceholderText('Town Name')
         self.widgets['town-pop'].setPlaceholderText('Population')
+        self.widgets['town-years'].setPlaceholderText('Years of History')
 
         # signals
         self.widgets['gen-seed'].clicked.connect(self.seedgensig)
@@ -100,9 +102,10 @@ class TownWizard(View):
         self.layouts['build'].addWidget(self.widgets['seed-stats'], 1, 1)
         self.layouts['build'].addWidget(self.widgets['town-name'], 2, 0, 1, 2)
         self.layouts['build'].addWidget(self.widgets['town-pop'], 3, 0, 1, 2)
-        self.layouts['build'].addWidget(self.widgets['town-gen'], 5, 0, 1, 3)
+        self.layouts['build'].addWidget(self.widgets['town-years'], 4, 0, 1, 2)
+        self.layouts['build'].addWidget(self.widgets['town-gen'], 6, 0, 1, 3)
 
-        self.layouts['build'].setRowStretch(4, 4)
+        self.layouts['build'].setRowStretch(5, 4)
 
         # main widget
         self.layouts['main'].addWidget(self.widgets['seed-box'], 0, 0)
@@ -111,6 +114,8 @@ class TownWizard(View):
     # ## seed signals ## #
 
     def seedgensig(self):
+        self.seeddumpsig()
+
         # error checking
         if len(self.stagelist) == 0:
             self.set_status('Nothing to make a seed out of')
@@ -119,7 +124,7 @@ class TownWizard(View):
         good = self.town.seed.check_integrity()
 
         if not good:
-            self.set_status('Bad seed (MAKE BETTER ERROR)')
+            self.set_status('Bad seed')
             return
 
         # get filename
@@ -135,13 +140,29 @@ class TownWizard(View):
         self.town.seed_load(fn)
         self.widgets['load-text'].setText(fn)
 
+    def seeddumpsig(self):
+        print('occupations:')
+        for i in self.town.seed.occupations:
+            print('  ' + i)
+        print('male names:')
+        for i in self.town.seed.names['male']:
+            print('  ' + i)
+        print('female names:')
+        for i in self.town.seed.names['female']:
+            print('  ' + i)
+        print('last names:')
+        for i in self.town.seed.names['last']:
+            print('  ' + i)
+
     def seedloadsig(self):
         print('load seed')
         name, _ = QFileDialog.getOpenFileName(self, 'Open File', './seeds')
 
-        self.town.seed_load(name)
-        self.widgets['load-text'].setText(name)
-        self.set_status(f'Seed {name} loaded')
+        # error check
+        if name != '':
+            self.town.seed_load(name)
+            self.widgets['load-text'].setText(name)
+            self.set_status(f'Seed {name} loaded')
 
     def seedaddsig(self):
         # get file name from tree
@@ -154,21 +175,29 @@ class TownWizard(View):
     # ## build signals ## #
 
     def towngensig(self):
-        # error check
-        if self.widgets['town-name'].text() == '':
-            self.set_status('No town name given')
-            return
-        if self.widgets['town-pop'].text() == '':
-            self.set_status('No population given')
-            return
-
         # variables
         tname = self.widgets['town-name'].text()
-        pop = int(self.widgets['town-pop'].text())
+        pop = self.widgets['town-pop'].text()
+        years = self.widgets['town-years'].text()
+
+        # error checking
+        if not self.town.active:
+            self.set_status('No seed loaded')
+            return
+        if tname == '':
+            self.set_status('No town name given')
+            return
+        if pop == '':
+            self.set_status('No population given')
+            return
+        if years == '':
+            self.set_status('No years given')
+            return
+
         fname, _ = QFileDialog.getSaveFileName(self, 'Save File', './towns')
 
-        self.town.gen_town(pop, 5, tname, fname)
-
+        if fname != '':
+            self.town.gen_town(int(pop), int(years), tname, fname)
 
     # ## signals ## #
 

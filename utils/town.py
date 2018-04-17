@@ -22,12 +22,19 @@ class TownSeed:
         self.active = False
 
         # names structure
-        self.names['m'] = []
-        self.names['f'] = []
+        self.names['male'] = []
+        self.names['female'] = []
         self.names['last'] = []
 
     def check_integrity(self):
-        # TODO: actually do this sometime
+        if len(self.names['male']) == 0:
+            return False
+        if len(self.names['female']) == 0:
+            return False
+        if len(self.names['last']) == 0:
+            return False
+        if len(self.occupations) == 0:
+            return False
         return True
 
 
@@ -68,7 +75,8 @@ class Town:
 
         # check integrity
         good = self.seed.check_integrity()
-        if not good: return
+        if not good:
+            return
 
     def seed_add(self, path):
         # indicate changes have been made
@@ -97,11 +105,14 @@ class Town:
             # merge new names into existing names
             # TODO: remove duplicates
             if 'male' in f:
-                self.seed.names['male'] = f['male']
+                for name in f['male']:
+                    self.seed.names['male'].append(name)
             if 'female' in f:
-                self.seed.names['female'] = f['female']
+                for name in f['female']:
+                    self.seed.names['female'].append(name)
             if 'last' in f:
-                self.seed.names['last'] = f['last']
+                for name in f['last']:
+                    self.seed.names['last'].append(name)
         else:
             return ''
 
@@ -117,7 +128,8 @@ class Town:
 
         # check integrity
         good = self.seed.check_integrity()
-        if not good: return
+        if not good:
+            return
 
         # header
         wdata['type'] = 'Seed'
@@ -139,7 +151,7 @@ class Town:
         for i in range(0, num_people):
             print('Person: ' + str(i))
             tmp = Person()
-            s = randint(0,1)
+            s = randint(0, 1)
             if s == 0:
                 print('  male')
                 tmp.sex = 'm'
@@ -151,32 +163,29 @@ class Town:
                 f = randint(0, len(self.seed.names['female']) - 1)
                 tmp.fname = self.seed.names['female'][f]
             print('  first name: ' + tmp.fname)
-            l = randint(0, len(self.seed.names['last']) - 1)
-            tmp.fname = self.seed.names['last'][l]
+            ln = randint(0, len(self.seed.names['last']) - 1)
+            tmp.fname = self.seed.names['last'][ln]
 
-            o = randint(0,len(self.seed.occupations) - 1)
+            o = randint(0, len(self.seed.occupations) - 1)
             tmp.ocupation = 'j'
 
-            # names are given in self.seed.names['first'/'last']
-
             self.citizens.append(Person())
-
 
     def gen_town(self, num_people, num_years, tname, filename):
         self.name = tname
         self.name_people(num_people)
 
-        for i in range(0, num_years): #loop on number of years
+        for i in range(0, num_years):  # loop on number of years
             for j in range(0, num_people):
                 r = randint(0, 4)
                 if r == 4:
-                    r = randint(0,9)
+                    r = randint(0, 9)
                     if r < 6:
-                        print('Giving an event 1')#pick an event
+                        print('Giving an event 1')  # pick an event
                     elif r < 9:
-                        print('Giving an event 2')#pick a 2
+                        print('Giving an event 2')  # pick a 2
                     else:
-                        print('Giving an event 3')#pick a 3
+                        print('Giving an event 3')  # pick a 3
 
             # after everything generated, export
             # self.export(filename)
