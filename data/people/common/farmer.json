@@ -3,7 +3,8 @@
     "title": "Farmer",
     "events": {
         "1": [
-            "Nearly starved during the winter of %y"
+            "Nearly starved during the winter of %y",
+	    "Did some farming."
         ],
         "2": [
             "Made extra coin from a bountiful harvest"

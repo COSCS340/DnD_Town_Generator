@@ -149,7 +149,6 @@ class Town:
 
     def name_people(self, num_people):
         for i in range(0, num_people):
-            # print('Person: ' + str(i))
             tmp = Person()
             s = randint(0, 1)
             if s == 0:
@@ -163,8 +162,8 @@ class Town:
             ln = randint(0, len(self.seed.names['last']) - 1)
             tmp.lname = self.seed.names['last'][ln]
 
-            o = randint(0, len(self.seed.occupations) - 1)
-            tmp.ocupation = o
+            o = randint(0, len(self.seed.occupations) -1)
+            tmp.occupation = list(self.seed.occupations.keys())[o]
 
             a = randint(0, 100)
             tmp.age = a
@@ -179,12 +178,28 @@ class Town:
             for j in range(0, num_people):
                 r = randint(0, 4)
                 if r == 4:
-                    r = randint(0, 9)
+                    r = randint(0, 10)
                     if r < 6:
-                        print('Giving an event 1')  # pick an event
+                        #Occupation 1
+                        r = randint(0, len(self.seed.occupations                        
+                        [self.citizens[j].occupation]['events']['1'])-1)
+
+                        self.citizens[j].life.append(self.seed.occupations
+                        [self.citizens[j].occupation]['events']['1'][r])
                     elif r < 9:
-                        print('Giving an event 2')  # pick a 2
+                        r = randint(0, len(self.seed.occupations                        
+                        [self.citizens[j].occupation]['events']['2'])-1)
+
+                        self.citizens[j].life.append(self.seed.occupations
+                        [self.citizens[j].occupation]['events']['2'][r])
+                    elif r == 9:
+                        r = randint(0, len(self.seed.occupations                        
+                        [self.citizens[j].occupation]['events']['3'])-1)
+
+                        self.citizens[j].life.append(self.seed.occupations
+                        [self.citizens[j].occupation]['events']['3'][r])
                     else:
+                        #Universal 3
                         print('Giving an event 3')  # pick a 3
 
             # after everything generated, export

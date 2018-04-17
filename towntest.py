@@ -35,4 +35,5 @@ print('TEST RESULTS:')
 for i in t.citizens:
     print((f'NAME: {i.fname} {i.lname}\n'
            f'SEX: {i.sex}\n'
+           f'JOB: {i.occupation}\n'
            f'LIFE?: {i.life}\n'))
