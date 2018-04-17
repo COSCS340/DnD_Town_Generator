@@ -26,8 +26,8 @@ class Main(QMainWindow):
         # houses custom view widgets
         # fancy stack widget
         self.mv = MultiView(self.mb, self.sb)
-        self.mv.add_view('mainmenu', MainMenu(self.mv))
         self.mv.add_view('wizard', TownWizard(self.mv))
+        self.mv.add_view('mainmenu', MainMenu(self.mv))
         self.mv.add_view('display', InfoDisplay(self.mv))
         self.mv.add_view('help', HelpMenu(self.mv))
         self.mv.set_view('mainmenu')
