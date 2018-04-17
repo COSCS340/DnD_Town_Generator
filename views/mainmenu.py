@@ -2,9 +2,10 @@
 
 import sys
 from PyQt5.QtWidgets import QGridLayout, QLabel, QLayoutItem
-from  PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QImage, QIcon, QPixmap, QFont
 from utils.multiview import View
+
 
 class MainMenu(View):
     """ Class that contains opening screen of program. """
@@ -21,8 +22,8 @@ class MainMenu(View):
         self.layouts['main'] = QGridLayout()
 
         self.widgets['welcomelabel'] = QLabel("Welcome! "
-                                               "To begin, load your town "
-                                               "into the wizard, or click help")
+                                              "To begin, load your town "
+                                              "into the wizard, or click help")
         font = QFont("Arial", 18)
         self.widgets['welcomelabel'].setFont(font)
 

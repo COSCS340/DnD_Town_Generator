@@ -77,6 +77,7 @@ class Main(QMainWindow):
     def load_help(self):
         self.mv.set_view('help')
 
+
 if __name__ == '__main__':
     # QT IT UP
     app = QApplication(sys.argv)

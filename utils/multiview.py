@@ -81,6 +81,7 @@ class MultiView(QWidget):
                     tmp.addAction(self.menu[m][s])
             '''
 
+
 class View(QWidget):
     def __init__(self, multiview):
         super().__init__()
@@ -128,7 +129,6 @@ class View(QWidget):
 
             # add the menu
             self.ViewMainMenu[m] = tmenu
-
 
     def set_layout(self, layout):
         self.ViewMainWidget.setLayout(layout)
