@@ -6,15 +6,13 @@ from utils.town import Town
 cla = len(sys.argv)
 
 if cla < 3:
-    print('Usage: towntest.py num_people num_years [pathtoseed]')
-    exit()
+    print(('Usage: towntest.py num_people num_years [pathtoseed]\n'
+           'Running default: 5 people for 5 years of history'))
+    nump = 5
+    numy = 5
 if cla == 3 or cla == 4:
     nump = int(sys.argv[1])
     numy = int(sys.argv[2])
-else:
-    nump = 5
-    numy = 5
-
 if cla == 4:
     path = sys.argv[3]
 else:
@@ -25,8 +23,8 @@ t = Town()
 if path == '':
     t.seed_add('data/people/common/farmer.json')
     t.seed_add('data/names.json')
-    t.seed_build('testseed.json')
-    t.seed_load('testseed.json')
+    t.seed_build('seeds/testseed.json')
+    t.seed_load('seeds/testseed.json')
 else:
     t.seed_load(path)
 
