@@ -45,6 +45,10 @@ class MultiView(QWidget):
     def get_widget(self):
         return self.MultiViewWidget
 
+    def access(self, name):
+        if name in self.views:
+            return self.views[name]
+
     def set_menu(self, menu):
         if self.menubar is not None and menu is not None:
             # clear menu things
