@@ -34,6 +34,7 @@ class InfoDisplay(View):
         self.widgets['basescroller'].setLayout(self.layouts['innerbox'])
 
         # build
+        self.widgets['scrollarea'].setWidgetResizable(False)
         self.widgets['scrollarea'].setWidget(self.widgets['basescroller'])
         self.layouts['main'].addWidget(self.widgets['scrollarea'])
         self.layouts['main'].addWidget(self.widgets['refresh'])
@@ -55,8 +56,8 @@ class InfoDisplay(View):
             self.boxes[i] = QTextEdit(self)
             self.boxes[i].setTextBackgroundColor(QColor(128, 128, 128))
             self.boxes[i].setReadOnly(True)
-            str = i.fname + ' ' + i.lname
-            self.boxes[i].setText(str)
+            fullname = i.fname + ' ' + i.lname
+            self.boxes[i].setText(fullname)
             self.boxes[i].setFontPointSize(12)
             self.layouts['innerbox'].addWidget(self.boxes[i])
             self.widgets['scrollarea'].setWidget(self.widgets['basescroller'])
