@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QGridLayout, QLabel, QPushButton
 from utils.multiview import View
 
+
 class HelpMenu(View):
     def setup_view(self):
         self.load_menu('config/help-menu.json')

@@ -162,7 +162,7 @@ class Town:
             ln = randint(0, len(self.seed.names['last']) - 1)
             tmp.lname = self.seed.names['last'][ln]
 
-            o = randint(0, len(self.seed.occupations) -1)
+            o = randint(0, len(self.seed.occupations) - 1)
             tmp.occupation = list(self.seed.occupations.keys())[o]
 
             a = randint(0, 100)
@@ -198,6 +198,7 @@ class Town:
                     cit.life.append(occs[r])
 
             # after everything generated, export
+            # TODO: exporting
             # self.export(filename)
 
     def new(self):

@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import *
 
 from utils.multiview import View
 
+
 class InfoDisplay(View):
     def setup_view(self):
         self.load_menu('config/display-menu.json')
