@@ -35,8 +35,13 @@ class InfoDisplay(View):
 
         # build
         self.widgets['scrollarea'].setWidgetResizable(False)
+        self.layouts['innerbox'].addWidget(QLabel('dogs'))
+        self.layouts['innerbox'].addWidget(QLabel('dogs'))
+        self.layouts['innerbox'].addWidget(QLabel('dogs'))
+        self.layouts['innerbox'].addWidget(QLabel('dogs'))
         self.widgets['scrollarea'].setWidget(self.widgets['basescroller'])
-        self.layouts['main'].addWidget(self.widgets['scrollarea'])
+        # CHANGED THIS
+        self.layouts['main'].addWidget(self.widgets['basescroller'])
         self.layouts['main'].addWidget(self.widgets['refresh'])
 
         # print(QtGlobal.qreal(12))
@@ -46,7 +51,8 @@ class InfoDisplay(View):
 
     # function to call when town created
     def refresh(self):
-        self.citizens = self.parent.access('wizard').town.citizens
+        print('here')
+
         if self.citizens == []:
             self.parent.statusbar.showMessage("Nothing in town.")
             return
