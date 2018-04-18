@@ -201,6 +201,7 @@ class TownWizard(View):
                 fname = fname + '.json'
             self.town.gen_town(int(pop), int(years), tname, fname)
             self.set_status(f'Town saved to {fname}')
+            self.parent.access('display').refresh()
 
     # ## signals ## #
 
@@ -267,6 +268,7 @@ class TownWizard(View):
                 success = self.town.build(filename, townname, townpop)
                 if success:
                     self.set_status('Saved to ' + filename)
+
                 else:
                     self.set_status('Something happened.')
 
