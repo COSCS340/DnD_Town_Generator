@@ -12,18 +12,29 @@ class InfoDisplay(View):
         self.layouts = {}
         self.widgets = {}
 
+        self.citizens = self.parent.access('wizard').town.citizens
+
         self.setupInterface()
 
     def setupInterface(self):
-        self.layouts['main'] = QVBoxLayout()
-
-        print(self.parent.access('wizard').town.citizens)
-        # print(super().access('wizard').town.citizens)
-
+        # widgets
         self.widgets['scrollarea'] = QScrollArea()
+        self.widgets['test'] = QPushButton('Press me')
 
-        self.layouts['main'].addWidget(self.widgets['scrollarea'])
+        self.widgets['test'].clicked.connect(self.update_list)
+
+        # layouts
+        self.layouts['main'] = QVBoxLayout()
         self.set_layout(self.layouts['main'])
+
+        # build
+        self.layouts['main'].addWidget(self.widgets['scrollarea'])
+        self.layouts['main'].addWidget(self.widgets['test'])
 
     def sig(self):
         sys.exit()
+
+    # function to call when town created
+    def update_list(self):
+        for i in self.citizens:
+            print(f'{i.fname} {i.lname}')

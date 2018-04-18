@@ -197,7 +197,10 @@ class TownWizard(View):
         fname, _ = QFileDialog.getSaveFileName(self, 'Save File', './towns')
 
         if fname != '':
+            if not fname.endswith('.json'):
+                fname = fname + '.json'
             self.town.gen_town(int(pop), int(years), tname, fname)
+            self.set_status(f'Town saved to {fname}')
 
     # ## signals ## #
 

@@ -30,9 +30,10 @@ class MainMenu(View):
         self.widgets['image'] = QLabel()
         pixmap = QPixmap('img/dnd4_resized.png')
         self.widgets['image'].setPixmap(pixmap)
+        self.widgets['image'].setAlignment(Qt.AlignCenter)
 
         self.layouts['main'].addWidget(self.widgets['welcomelabel'], 0, 1)
-        self.layouts['main'].addWidget(self.widgets['image'], 1, 1)
+        self.layouts['main'].addWidget(self.widgets['image'], 1, 1,)
         self.layouts['main'].setColumnStretch(0, 1)
         self.layouts['main'].setColumnStretch(2, 1)
         self.layouts['main'].setRowStretch(2, 1)
