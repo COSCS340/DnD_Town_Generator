@@ -5,7 +5,7 @@
             "hotkey": "Ctrl+N"
         },
         "&Open": {
-            "signal": "loadsig",
+            "signal": "seedloadsig",
             "hotkey": "Ctrl+O"
         },
         "&Build": {

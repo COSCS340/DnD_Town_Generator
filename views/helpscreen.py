@@ -3,6 +3,7 @@ from PyQt5.QtCore import QFile, QTextStream
 from os import getcwd
 from utils.multiview import View
 
+
 class HelpMenu(View):
     def setup_view(self):
         self.load_menu('config/help-menu.json')

@@ -1,0 +1,19 @@
+{
+	"type": "Person",
+	"title": "Inkeep",
+	"events": {
+		"1": [
+			"Started watering down the ale more.",
+			"Started watering down the ale less.",
+			"Had to replace furniture after a few customers got rowdy."
+		],
+		"2": [
+			"Lost the inn to fire.",
+			"The inn was burgled that June."
+		],
+		"3": [
+			"Gave four rooms to a mysterious group that came hooded in the dead of night.",
+			"Discovered an old sword beneath the floorboards."
+		]
+	}
+}

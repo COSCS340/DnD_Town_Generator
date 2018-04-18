@@ -1,0 +1,27 @@
+{
+	"type": "Person",
+	"title": "Noble",
+	"events": {
+		"1": [
+			"Comissioned a self-portrait",
+			"Comissioned a statue of themself",
+			"Renovated the manor.",
+			"Caught one of the servants stealing bread.",
+			"Had an affair with a servant.",
+			"Went off to fight for their liege.",
+			"Threw a legendary ball.",
+			"Comissioned a set of ceremonial armor and weapons."
+		],
+		"2": [
+			"Gained more land from their king.",
+			"Gained an injury during war.",
+			"Gained an injury during a grand hunt.",
+			"Their home was robbed that April."
+		],
+		"3": [
+
+			"Recieved an invititation to a secret society.",
+			"Hired a band of green adventurers to clear out local goblins. They never returned."
+		]
+	}
+}
