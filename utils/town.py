@@ -194,8 +194,9 @@ class Town:
                         occs = self.seed.occupations[occ]['events']['3']
 
                     # get random event and add
-                    r = randint(0, len(occs) - 1)
-                    cit.life.append(occs[r])
+                    if len(occs) != 0:
+                        r = randint(0, len(occs) - 1)
+                        cit.life.append(occs[r])
 
             # after everything generated, export
             # TODO: exporting
