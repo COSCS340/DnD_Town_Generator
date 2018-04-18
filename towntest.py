@@ -21,10 +21,21 @@ else:
 t = Town()
 
 if path == '':
+    t.seed_add('data/people/common/beggar.json')
+    t.seed_add('data/people/common/blacksmith.json')
     t.seed_add('data/people/common/farmer.json')
+    t.seed_add('data/people/common/fisherman.json')
+    t.seed_add('data/people/common/gravedigger.json')
+    t.seed_add('data/people/common/guard.json')
+    t.seed_add('data/people/common/hunter.json')
+    t.seed_add('data/people/common/inkeep.json')
+    t.seed_add('data/people/common/mercenary.json')
+    t.seed_add('data/people/common/merchant.json')
+    t.seed_add('data/people/common/noble.json')
+    t.seed_add('data/people/common/universal.json')
     t.seed_add('data/names.json')
-    t.seed_build('seeds/testseed.json')
-    t.seed_load('seeds/testseed.json')
+    t.seed_build('seeds/sampleseed.json')
+    t.seed_load('seeds/sampleseed.json')
 else:
     t.seed_load(path)
 
