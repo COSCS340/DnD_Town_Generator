@@ -1,16 +1,20 @@
 {
-    "type": "Person",
-    "title": "Fisherman",
-    "events": {
-        "1": [
-            "He swears that he saw a Kracken that day.",
-            "Lost his boat in a storm."
-        ],
-        "2": [
-            "Lost his boat to hostile aquatic life"
-        ],
-        "3": [
-            "Actually caught a Kracken.  {name} is now famous."
-        ]
-    }
+	"type": "Person",
+	"title": "Fisherman",
+	"events": {
+		"1": [
+			"Caught a personal record number of fish.",
+			"Came back with empty nets the whole year, nearly starved.",
+			"Went through 87 nets and 26 rods that year."
+		],
+		"2": [
+			"Had their boat carried off in a storm.",
+			"Nearly drowned in a storm.",
+			"Lost their boat to theves."
+		],
+		"3": [
+			"Swore they saw a kracken at sea.",
+			"Caught the biggest fish the town had ever seen."
+		]
+	}
 }

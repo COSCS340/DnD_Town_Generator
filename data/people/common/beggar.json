@@ -1,0 +1,19 @@
+{
+	"type": "Person",
+	"title": "Beggar",
+	"events": {
+		"1": [
+			"Went a week without food",
+			"Was kicked from the door of the local noble."
+		],
+		"2": [
+			"Got into a fight with a feral cat.",
+			"Got into a fight with a feral dog.",
+			"Heard a juicy secret about the blacksmith",
+			"Spent a stint in jail."
+		],
+		"3": [
+			"Was granted a kindness by a mysterious stranger."
+		]
+	}
+}
