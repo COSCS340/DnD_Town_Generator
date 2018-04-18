@@ -1,0 +1,22 @@
+{
+	"type": "Person",
+	"title": "Mercenary",
+	"events": {
+		"1": [
+			"Was out of town on work that year.",
+			"Earned a hefty sum for their work that year.",
+			"A year of no work left them drunk in the tavern most nights."
+		],
+		"2": [
+			"Got into a tussle with the local guards.",
+			"Gained an injury on campagin.",
+			"Gained an injury on a monster hunt.",
+			"Gained an injury working pro-bono."
+		],
+		"3": [
+			"Was hired by adventurers, and saw much of the world.",
+			"Was contracted to a dragon hunt.",
+			"Guarded a group of hooded men who worked in the local sewers."
+		]
+	}
+}

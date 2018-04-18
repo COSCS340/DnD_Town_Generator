@@ -1,0 +1,20 @@
+{
+	"type": "Person",
+	"title": "Beggar",
+	"events": {
+		"1": [
+			"Was contracted to arm the guards that year.",
+			"A shipment of good iron produced especially fine swords."
+		],
+		"2": [
+			"Got into a fight in the tavern",
+			"Gained an injury working the forge.",
+			"Lost their house to fire"
+		],
+		"3": [
+			"Was sold a mysterious sword by a hooded figure.",
+			"Was sold a mysterious shield by a masked figure.",
+			"Forged a great sword as a gift."
+		]
+	}
+}
