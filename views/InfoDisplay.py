@@ -1,4 +1,5 @@
 import sys
+import random
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import *
@@ -54,11 +55,30 @@ class InfoDisplay(View):
             return
         else:
             self.parent.statusbar.showMessage('')
+        j = 0
         for i in self.citizens:
+            j += 1
             self.boxes[i] = QTextEdit(self)
-            self.boxes[i].setTextBackgroundColor(QColor(128, 128, 128))
+            self.boxes[i].setStyleSheet("QTextEdit { background-color: rgb(211, 211, 211) }")
             self.boxes[i].setReadOnly(True)
-            fullname = i.fname + ' ' + i.lname
+            fullname = str(j) + '. ' + i.fname + ' ' + i.lname + '\n'
+
+            if i.sex == 'm':
+                sex = 'Male'
+            else:
+                sex = 'Female'
+            fullname += '\tSex: ' + sex + '\n'
+
+            if i.age == 0:
+                rand = random.randint(1,12)
+                age = str(rand) + ' Months'
+            else:
+                age = str(i.age) + ' Years'
+            fullname += '\tAge: ' + age + '\n'
+            fullname += '\tOccupation: ' + i.occupation + '\n'
+            fullname += '\t Life Events: \n'
+            for event in i.life:
+                fullname += '\t\t' + event + '\n'
             self.boxes[i].setText(fullname)
             self.boxes[i].setFontPointSize(12)
             self.layouts['innerbox'].addWidget(self.boxes[i])
