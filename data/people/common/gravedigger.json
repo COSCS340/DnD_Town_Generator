@@ -1,0 +1,19 @@
+{
+	"type": "Person",
+	"title": "Gravedigger",
+	"events": {
+		"1": [
+			"Nearly killed a graverobber in a fight.",
+			"Was nearly killed by a graverobber."
+		],
+		"2": [
+			"Stole the jewlery off a corpse before filling the hole.",
+			"Found their shovel stolen each morning for a full month"
+		],
+		"3": [
+			"Was attacked by undead in the cemetary.",
+			"Was attacked by cultists.",
+			"Was bribed by a cult for access to the graveyard."
+		]
+	}
+}

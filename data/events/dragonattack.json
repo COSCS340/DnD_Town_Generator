@@ -1,17 +1,16 @@
 {
+    "type": "Event",
+    "title": "Dragon Attack",
+    "description": "A dragon attacks the town",
     "events": {
-        "dragon attack": {
-            "description": "A dragon attacks the town",
-            "outcomes": {
-                "town destroyed": {
-                    "description": "The town was destroyed",
-                    "chance": 50
-                },
-                "heavy damage": {
-                    "description": "The town was heavily damaged",
-                    "chance": 40
-                }
-            }
+        "1": {
+            "Light damage": "Turns out the dragon was afraid of dogs and fled upon seeing a small animal shelter"
+        },
+        "2": {
+            "Heavy Damage": "14 people died"
+        },
+        "3": {
+            "Town destroyed": "The dragon destroyed the town and left"
         }
     }
 }

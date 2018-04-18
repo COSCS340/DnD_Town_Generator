@@ -1,0 +1,23 @@
+{
+	"type": "Person",
+	"title": "Farmer",
+	"events": {
+		"1": [
+			"Gained an injury in the field.",
+			"A wave of disease killed the crop.",
+			"An invasion of pests killed the crop"
+		],
+		"2": [
+			"Victorious in the local festival games",
+			"Lost their home to fire",
+			"Found their fields robbed one morning.",
+			"Found ancient weapons and humanoid remains while tilling new fields"
+		],
+		"3": [
+			"Found buried treasure while tilling new fields.",
+			"Fielded a bountiful harvest.",
+			"Lost nearly all their crop that winter."
+
+		]
+	}
+}

@@ -1,0 +1,8 @@
+{
+    "&File": {
+        "&Close": {
+            "signal": "sig",
+            "hotkey": "Ctrl+O"
+        }
+    }
+}

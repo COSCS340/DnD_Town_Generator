@@ -1,0 +1,22 @@
+{
+	"type": "Person",
+	"title": "Hunter",
+	"events": {
+		"1": [
+			"Narrowly escaped a bear's wrath.",
+			"Could barely afford to feed their family that winter"
+		],
+		"2": [
+			"Got into trouble with the guard for poaching the noble's game.",
+			"Lost their home to fire.",
+			"Gained an injury from a wild bear.",
+			"Gained an injury from a wild boar.",
+			"Chased out of the forest by goblins."
+		],
+		"3": [
+
+			"Stumbled upon a strange clutch of eggs.",
+			"Thinks they saw a unicorn one day while hunting."
+		]
+	}
+}

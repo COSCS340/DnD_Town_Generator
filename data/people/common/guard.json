@@ -1,0 +1,21 @@
+{
+	"type": "Person",
+	"title": "Guard",
+	"events": {
+		"1": [
+			"Gained an injury trying to arrest a theif.",
+			"Gained an injury trying to arrest an arsonist.",
+			"Gained an injury trying to arrest a murderer."
+		],
+		"2": [
+			"Gained an injury trying to arrest an adventurer.",
+			"Fought off Orcish raiders.",
+			"Took in a large bribe from the local thieves guild."
+		],
+		"3": [
+			"Lost their home to a fire.",
+			"Got a promotion.",
+			"Found themself tied up in a basement with no memory of how it occurred."
+		]
+	}
+}

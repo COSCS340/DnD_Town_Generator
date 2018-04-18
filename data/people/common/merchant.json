@@ -1,0 +1,20 @@
+{
+	"type": "Person",
+	"title": "Mercant",
+	"events": {
+		"1": [
+			"A low number of outside shipments left them with little to sell this year.",
+			"Closed the store for the year and went to sell goods in other towns.",
+			"Booked a red year.",
+			"Booked a black year."
+		],
+		"2": [
+			"Found the store robbed one morning that January.",
+			"Lost the store to fire."
+		],
+		"3": [
+			"A group of adventurers cleared out their store.",
+			"A strange woman, who's face cannot be recalled handed them an orb, saying to keep it secret."
+		]
+	}
+}
