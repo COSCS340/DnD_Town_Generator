@@ -34,14 +34,10 @@ class InfoDisplay(View):
         self.widgets['basescroller'].setLayout(self.layouts['innerbox'])
 
         # build
-        self.widgets['scrollarea'].setWidgetResizable(False)
-        self.layouts['innerbox'].addWidget(QLabel('dogs'))
-        self.layouts['innerbox'].addWidget(QLabel('dogs'))
-        self.layouts['innerbox'].addWidget(QLabel('dogs'))
-        self.layouts['innerbox'].addWidget(QLabel('dogs'))
+        self.widgets['scrollarea'].setWidgetResizable(True)
         self.widgets['scrollarea'].setWidget(self.widgets['basescroller'])
         # CHANGED THIS
-        self.layouts['main'].addWidget(self.widgets['basescroller'])
+        self.layouts['main'].addWidget(self.widgets['scrollarea']) #needs to be basescroller
         self.layouts['main'].addWidget(self.widgets['refresh'])
 
         # print(QtGlobal.qreal(12))
