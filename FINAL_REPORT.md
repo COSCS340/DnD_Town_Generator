@@ -113,3 +113,65 @@ a 1 in 4 chance of being assigned an event.
 
 ![ScreenShot](screenshots/Wizard.png)
 ###### Above Screenshot is the wizard screen
+
+Finally, the display screen can be loaded in once a town file is generated.
+There is a "Refresh" button at the bottom in case something goes wrong.
+This menu will show each NPC, including all relevant generated details regarding
+that NPC. This window is scrollable, and includes sub-scrollable text boxes for
+each NPC.
+
+![ScreenShot](screenshots/Display.png)
+###### Above Screenshot is the display screen
+
+We've done quite a bit of testing on our product, and during the course of that
+time we've discovered several small bugs that need to be fixed. Of these,
+the main concerns we've found include clearing the display menu after loading
+a new town, no delete button in the wizard, and a strange assortment of GUI issues
+only present on MacOS.
+
+## Team
+At the beginning, our team self-separated into two teams: the backend team and the
+GUI team. The backend team consisted of Bert Bashford and Ben Johnson. The GUI team
+consisted of Dakota Sanders and Matt Matto. These teams persisted until the middle
+of March, when we decided to ditch the current GUI design.
+
+From then on, we all had an equal part in the generation and display of the content.
+Each team members' contributions are as follows:
+
+    Dakota Sanders: Responsible for the help menu and the display menu.
+    Matt Matto: Responsible for the icon, display menu, and bugfixes.
+    Bert Bashford: Responsible for most of the randomization and test files.
+    Ben Johnson: Responsible for application architecture and wizard development.
+
+## Project Management
+We managed to create a functioning generator that could deliver useful information
+to a dungeon master in a visually pleasing format.
+Time constraints forced us to abandon the goals of town-wide events and interaction
+between characters (i.e. marriage). The idea of map generation was also abandoned
+much earlier. Time was the main constraint on these goals, but they were secondary
+goals, so that is alright.
+
+## Reflection
+Some of the things that went very well were our selection of PyQt5 as our framework.
+This ended up being a very useful and fun framework to code in, and the final product
+looks nice and functions well. Our interactions as a team also went very well.
+Our communication was open and we split up the work more or less evenly among
+members. Our code had good synergy, and we had very few merge conflicts or
+troubles getting everyone to understand their part or what other members' code did.
+
+Some things that did not go well were the initial development of our GUI, primarily
+due to poor planning. We should have planned out what our application would look
+like visually before we tried to create a GUI at all. This would have saved us a
+tremendous amount of time, and allowed us to pursue more of our secondary goals.
+There are also still a number of bugs that did not reveal themselves until the very
+end of the project, so there were issues in our final demonstration that will
+need to be ironed out if the code is to continue.
+One of the issues we encountered was a difference in Python versions. Some of us
+were running Python 3.6.5, while some of us were still running older versions.
+This created issues with some of the code we had written, so we had to update the
+Python versions across our team, which ended up being harder than we first imagined.
+
+Overall the final project was a success. It does what it is supposed to do, and it
+does it in a fast, clean, and easy to understand way. We are not that far From
+achieving our secondary goals, so this project could easily be continued if we
+desire.
