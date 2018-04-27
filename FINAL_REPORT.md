@@ -81,3 +81,35 @@ minimum viable product.
 ## Technology
 
 ![ScreenShot](screenshots/MainMenu.png)
+###### Above Screenshot is the opening menu of our application.
+
+Our minimum viable product for this semester was an app that would generate
+and display the characters within the town. By the time our group presented the
+project, we had completed the MVP and were ready to begin adding extra functionality.
+One of the things we finished actually before the MVP was even done was the
+ability to generate, save, and load seeds and towns. We also implemented functionality
+to undo any additions made within the town wizard. Both of these additions
+were not necessary for the minimum viable product, but we managed to create those
+at the same time we implemented some of the other important features within
+our app.
+
+Our application is broken down into 4 main sections: the Main Menu, the Wizard,
+the Display Page, and the Help Menu.
+
+The Main Menu and Help menu are just display pages. The main menu displays an image
+and provides navigation menus. The help menu displays an HMTL page that tells users
+how to use the application.
+
+The wizard is the most complex part of our app. It functions as follows: The user
+loads in JSON files containing details on character events and character names.
+From there, the user clicks "Generate seed", and is prompted for a save location
+for the seed file. This seed file is automatically loaded into the town Generator
+on the right side of the screen, and the user is then prompted to input a name
+for the town, population, and years of history. Once "Generate Town" is clicked,
+the user selects a save location for the town file. The population and years of
+history designate how many characters are to be displayed, and how many events
+they should have assigned to them. For each year of history, each character has
+a 1 in 4 chance of being assigned an event.
+
+[ScreenShot](screenshots/Wizard.png)
+###### Above Screenshot is the wizard screen
