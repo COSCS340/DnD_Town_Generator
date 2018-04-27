@@ -39,7 +39,7 @@ class Main(QMainWindow):
         self.widgets['wizard'] = QPushButton('Wizard')
         self.widgets['display'] = QPushButton('Display Town')
         self.widgets['help'] = QPushButton('Help')
-
+        
         # create a base layout
         self.layout = QGridLayout()
 
