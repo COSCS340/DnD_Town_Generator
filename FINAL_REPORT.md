@@ -111,5 +111,5 @@ history designate how many characters are to be displayed, and how many events
 they should have assigned to them. For each year of history, each character has
 a 1 in 4 chance of being assigned an event.
 
-[ScreenShot](screenshots/Wizard.png)
+![ScreenShot](screenshots/Wizard.png)
 ###### Above Screenshot is the wizard screen
