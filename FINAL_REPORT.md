@@ -135,11 +135,11 @@ GUI team. The backend team consisted of Bert Bashford and Ben Johnson. The GUI t
 consisted of Dakota Sanders and Matt Matto. These teams persisted until the middle
 of March, when we decided to ditch the current GUI design.
 
-From then on, we all had an equal part in the generation and display of the content.
+From then on, we as a team focused on generating NPCs and displaying them.
 Each team members' contributions are as follows:
 
     Dakota Sanders: Responsible for the help menu and the display menu.
-    Matt Matto: Responsible for the icon, display menu, and bugfixes.
+    Matt Matto: Responsible for the icon, bugfixes, and testing.
     Bert Bashford: Responsible for most of the randomization and test files.
     Ben Johnson: Responsible for application architecture and wizard development.
 
@@ -155,9 +155,10 @@ goals, so that is alright.
 Some of the things that went very well were our selection of PyQt5 as our framework.
 This ended up being a very useful and fun framework to code in, and the final product
 looks nice and functions well. Our interactions as a team also went very well.
-Our communication was open and we split up the work more or less evenly among
-members. Our code had good synergy, and we had very few merge conflicts or
-troubles getting everyone to understand their part or what other members' code did.
+Our communication was open and we split up the work pretty evenly among most members.
+We had some trouble at the beginning making sure everyone knew how the code
+worked, but by the end of it most of us were at least familiar enough with the
+codebase to positively help the team.
 
 Some things that did not go well were the initial development of our GUI, primarily
 due to poor planning. We should have planned out what our application would look
